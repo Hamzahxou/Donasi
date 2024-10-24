@@ -85,14 +85,14 @@
 
                 </div>
                 <div x-data="{ share: false }"
-                    class="bg-gray-200 h-screen flex-initial lg:w-80 rounded-md flex flex-col items-center p-5 gap-2">
+                    class="bg-gray-200 h-screen flex-initial lg:w-80 rounded-md flex flex-col items-center p-2 gap-2 overflow-y-auto">
                     <div x-data="{ donasi: false }" class="w-full">
-                        <x-primary-button @click="donasi = true" class="w-full py-4">Donasi
+                        <x-primary-button x-on:click="donasi = true" class="w-full py-4">Donasi
                             Sekarang</x-primary-button>
                         <div x-show="donasi"
-                            class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center">
-                            <div class="bg-white p-4 relative rounded-md">
-                                <div @click="donasi = false"
+                            class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
+                            <div class="bg-white p-10 relative rounded-md w-96">
+                                <div x-on:click="donasi = false"
                                     class="absolute bg-white rounded-full -top-2 -right-2 text-sm text-gray-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -101,65 +101,123 @@
                                 </div>
                                 <!-- component -->
                                 <!-- This is an example component -->
+                                <div x-data="{ payment: null }" class='pb-8 mx-auto space-y-4'>
+                                    <div x-show="payment === null" class="space-y-4">
+                                        <p class="text-sm font-medium text-center text-neutral-500">
+                                            Pilih Metode Donasi
+                                        </p>
+                                        <div class="relative" x-on:click="payment = 'bank'">
+                                            <input type="radio" name="options" id="option1-checkbox" value="1"
+                                                class="hidden peer">
+                                            <label for="option1-checkbox"
+                                                class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
+                                                <div class="flex items-center space-x-5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                                                        class="w-10 h-10">
+                                                        <path
+                                                            d="M535 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l64 64c4.5 4.5 7 10.6 7 17s-2.5 12.5-7 17l-64 64c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l23-23L384 112c-13.3 0-24-10.7-24-24s10.7-24 24-24l174.1 0L535 41zM105 377l-23 23L256 400c13.3 0 24 10.7 24 24s-10.7 24-24 24L81.9 448l23 23c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L7 441c-4.5-4.5-7-10.6-7-17s2.5-12.5 7-17l64-64c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zM96 64l241.9 0c-3.7 7.2-5.9 15.3-5.9 24c0 28.7 23.3 52 52 52l117.4 0c-4 17 .6 35.5 13.8 48.8c20.3 20.3 53.2 20.3 73.5 0L608 169.5 608 384c0 35.3-28.7 64-64 64l-241.9 0c3.7-7.2 5.9-15.3 5.9-24c0-28.7-23.3-52-52-52l-117.4 0c4-17-.6-35.5-13.8-48.8c-20.3-20.3-53.2-20.3-73.5 0L32 342.5 32 128c0-35.3 28.7-64 64-64zm64 64l-64 0 0 64c35.3 0 64-28.7 64-64zM544 320c-35.3 0-64 28.7-64 64l64 0 0-64zM320 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192z"
+                                                            fill="#1C274C" />
+                                                    </svg>
+                                                    <div class="flex flex-col justify-start">
+                                                        <div class="w-full text-lg font-semibold">Midtrans</div>
+                                                        <div class="w-full text-sm opacity-60">Layanan lebih mudah
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="relative" x-on:click="payment = 'transfer'">
+                                            <input type="radio" name="options" id="option2-checkbox"
+                                                value="2" class="hidden peer">
+                                            <label for="option2-checkbox"
+                                                class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
+                                                <div class="flex items-center space-x-5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                        class="w-10 h-10">
+                                                        <path
+                                                            d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-224c0-35.3-28.7-64-64-64L80 128c-8.8 0-16-7.2-16-16s7.2-16 16-16l368 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L64 32zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                                                            fill="#1C274C" />
+                                                    </svg>
+                                                    <div class="flex flex-col justify-start">
+                                                        <div class="w-full text-lg font-semibold">Transfer</div>
+                                                        <div class="w-full text-sm opacity-60">Layanan kontrol manual
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
 
-                                <div class='w-full max-w-lg px-10 py-8 mx-auto bg-white rounded-lg shadow-xl'>
-                                    <div class='max-w-md mx-auto space-y-6'>
-                                        <div class="space-y-4">
-                                            <p class="text-sm font-medium text-center text-neutral-500">Select a
-                                                option</p>
-                                            <div class="relative">
-                                                <input type="radio" name="options" id="option1-checkbox"
-                                                    value="1" class="hidden peer">
-                                                <label for="option1-checkbox"
-                                                    class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
-                                                    <div class="flex items-center space-x-5">
-                                                        <svg class="w-16 h-auto" xmlns="http://www.w3.org/2000/svg"
-                                                            width="1em" height="1em" viewBox="0 0 256 256">
-                                                            <g fill="currentColor">
-                                                                <path
-                                                                    d="M224 56v122.06l-39.72-39.72a8 8 0 0 0-11.31 0L147.31 164l-49.65-49.66a8 8 0 0 0-11.32 0L32 168.69V56a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8"
-                                                                    opacity="0.2" />
-                                                                <path
-                                                                    d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 16v102.75l-26.07-26.06a16 16 0 0 0-22.63 0l-20 20l-44-44a16 16 0 0 0-22.62 0L40 149.37V56ZM40 172l52-52l80 80H40Zm176 28h-21.37l-36-36l20-20L216 181.38zm-72-100a12 12 0 1 1 12 12a12 12 0 0 1-12-12" />
-                                                            </g>
-                                                        </svg>
-                                                        <div class="flex flex-col justify-start">
-                                                            <div class="w-full text-lg font-semibold">Option 1
-                                                            </div>
-                                                            <div class="w-full text-sm opacity-60">The first option
-                                                                is cool</div>
-                                                        </div>
-                                                    </div>
-                                                </label>
+                                    <div x-show="payment !== null">
+                                        <x-secondary-button x-on:click="payment = null">
+                                            kembali
+                                        </x-secondary-button>
+                                    </div>
+                                    <div x-show="payment === 'bank'">
+                                        <form action="" method="post" class="w-full">
+                                            <x-text-input id="nominal" class="mt-1 block w-full uang p-4"
+                                                type="text" name="nominal" value="5000" required autofocus />
+                                            <div class="flex gap-2 flex-wrap my-3">
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '5.000'">Rp.5.000</x-secondary-button>
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '10.000'">Rp.10.000</x-secondary-button>
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '20.000'">Rp.20.000</x-secondary-button>
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '50.000'">Rp.50.000</x-secondary-button>
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '100.000'">Rp.100.000</x-secondary-button>
+                                                <x-secondary-button type="button"
+                                                    onclick="document.getElementById('nominal').value = '500.000'">Rp.500.000</x-secondary-button>
                                             </div>
-                                            <div class="relative">
-                                                <input type="radio" name="options" id="option2-checkbox"
-                                                    value="2" class="hidden peer">
-                                                <label for="option2-checkbox"
-                                                    class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
-                                                    <div class="flex items-center space-x-5">
-                                                        <svg class="w-16 h-auto" xmlns="http://www.w3.org/2000/svg"
-                                                            width="1em" height="1em" viewBox="0 0 256 256">
-                                                            <g fill="currentColor">
-                                                                <path
-                                                                    d="M224 56v122.06l-39.72-39.72a8 8 0 0 0-11.31 0L147.31 164l-49.65-49.66a8 8 0 0 0-11.32 0L32 168.69V56a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8"
-                                                                    opacity="0.2" />
-                                                                <path
-                                                                    d="M216 40H40a16 16 0 0 0-16 16v144a16 16 0 0 0 16 16h176a16 16 0 0 0 16-16V56a16 16 0 0 0-16-16m0 16v102.75l-26.07-26.06a16 16 0 0 0-22.63 0l-20 20l-44-44a16 16 0 0 0-22.62 0L40 149.37V56ZM40 172l52-52l80 80H40Zm176 28h-21.37l-36-36l20-20L216 181.38zm-72-100a12 12 0 1 1 12 12a12 12 0 0 1-12-12" />
-                                                            </g>
+                                            <x-primary-button type="submit" class="w-full">
+                                                Kirim
+                                            </x-primary-button>
+                                        </form>
+                                    </div>
+
+                                    <div x-show="payment === 'transfer'" class="relative">
+                                        <x-text-input value="085336889508" class="w-full" />
+                                        <div class="w-full my-2">
+                                            <form action="" method="post" enctype="multipart/form-data">
+                                                <label
+                                                    class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                    htmlFor="dropzone-file">
+                                                    <div class="flex justify-center flex-col items-center "
+                                                        id="preview-label">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-10 w-10 text-orange-800" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            strokeWidth="2">
+                                                            <path strokeLinecap="round" strokeLinejoin="round"
+                                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                                         </svg>
-                                                        <div class="flex flex-col justify-start">
-                                                            <div class="w-full text-lg font-semibold">Option 2
-                                                            </div>
-                                                            <div class="w-full text-sm opacity-60">The second
-                                                                option is nice</div>
-                                                        </div>
+
+                                                        <h2
+                                                            class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                            Bukti Transfer</h2>
+
+                                                        <p class="mt-2 text-gray-500 tracking-wide">Unggah atau seret &
+                                                            lepas
+                                                            file Anda
+                                                            berkas PNG, JPG, JPEG</p>
+
+                                                        <input id="dropzone-file" type="file" class="hidden"
+                                                            name="category_image" onchange="previews(this)"
+                                                            accept="image/png, image/jpeg, image/jpg" />
+
                                                     </div>
+                                                    <img id="preview" class="w-full rounded-md">
                                                 </label>
-                                            </div>
+
+                                                <x-primary-button type="submit"
+                                                    class="w-full mt-2">Kirim</x-primary-button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -220,5 +278,29 @@
         </div>
     </div>
 
+    @push('scripts')
+        <script src="{{ asset('storage/assets/js/jquery-3.7.1.js') }}"></script>
+        <script src="{{ asset('storage/assets/js/jquery.mask.min.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.uang').mask('000.000.000', {
+                    reverse: true
+                });
 
+            })
+        </script>
+
+        <script>
+            function previews(e) {
+                const [file] = e.files;
+                const extension_available = ['png', 'jpg', 'jpeg'];
+                const extension_file = file['type'].split('/')[1];
+                if (extension_available.includes(extension_file)) {
+                    document.getElementById('preview-label').classList.add('hidden')
+                    document.getElementById('preview').src = URL.createObjectURL(file);
+                }
+
+            }
+        </script>
+    @endpush
 </x-main>
