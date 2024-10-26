@@ -1,4 +1,4 @@
-<x-main title="Donasi">
+<x-main title="Mulai Donasimu">
     <div class="bg-white h-screen font-sans flex flex-col ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-12 lg:gap-8 ">
@@ -45,103 +45,105 @@
         </div>
     </div>
     <!-- component -->
-    <div class="flex justify-center items-center" id="donation-tab">
+    <div class="flex justify-center items-center min-h-screen" id="donation-tab">
         <div class="mx-auto">
-            <div class="block mb-4 mx-auto pb-2">
-                <h1 class="block w-full px-4 pb-2 text-center text-2xl font-bold text-gray-900 transition-all">
+            <div class="block mb-4 mx-auto border-b border-slate-300 pb-2">
+                <span class="block w-full px-4 py-2 text-center text-slate-700 transition-all">
                     Dengan bantuan Anda, dapat membantu mereka
-                </h1>
+                </span>
             </div>
-            <div x-data="{ openTab: 1 }" class="p-8 pt-3 w-svw">
+
+
+            <div x-data="{ openTab: 0 }" class="p-8 w-svw">
                 <div class="flex justify-center items-center gap-2 w-full mb-4">
-                    <button x-on:click="openTab = 1" :class="{ 'bg-orange-300 text-white': openTab === 1 }"
-                        class=" py-2 px-4 rounded-md bg-gray-100 focus:outline-none focus:shadow-outline-orange transition-all duration-300">Section
-                        1</button>
-                    <button x-on:click="openTab = 2" :class="{ 'bg-orange-300 text-white': openTab === 2 }"
-                        class=" py-2 px-4 rounded-md bg-gray-100 focus:outline-none focus:shadow-outline-orange transition-all duration-300">Section
-                        2</button>
-                    <button x-on:click="openTab = 3" :class="{ 'bg-orange-300 text-white': openTab === 3 }"
-                        class=" py-2 px-4 rounded-md bg-gray-100 focus:outline-none focus:shadow-outline-orange transition-all duration-300">Section
-                        3</button>
+                    @foreach ($categories as $index => $category)
+                        <button x-on:click="openTab = {{ $index }}"
+                            :class="{ 'bg-orange-300 text-white': openTab === {{ $index }} }"
+                            class=" py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-orange transition-all duration-300">{{ $category->name }}</button>
+                    @endforeach
                 </div>
+                @foreach ($categories as $index => $category)
+                    @if ($category->projects->count() > 0)
+                        @foreach ($category->projects as $project)
+                            <div x-show="openTab === {{ $index }}" class="transition-all duration-300">
+                                <div class="flex gap-2 justify-center items-center flex-wrap">
+                                    <!-- Centering wrapper -->
+                                    <div
+                                        class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
+                                        <div
+                                            class="relative mx-4 mt-4 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
+                                            <img src="{{ asset('storage/' . $project->image) }}"
+                                                alt="ui/ux review check" />
 
-                <div x-show="openTab === 1" class="transition-all duration-300">
-                    <div class="flex gap-2 justify-center items-center flex-wrap">
-                        <!-- Centering wrapper -->
-                        <div
-                            class="relative flex w-96 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                            <div
-                                class="relative mx-4 mt-4 overflow-hidden text-white shadow-lg rounded-xl bg-blue-gray-500 bg-clip-border shadow-blue-gray-500/40">
-                                <img src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                                    alt="ui/ux review check" />
-
-                            </div>
-                            <div class="p-6 pb-2">
-                                <div class="mb-3">
-                                    <h5
-                                        class="block font-sans text-xl antialiased font-medium leading-snug tracking-normal text-blue-gray-900">
-                                        Wooden House, Florida
-                                    </h5>
-                                </div>
-                                <p
-                                    class="block font-sans text-base antialiased font-light leading-relaxed text-gray-700">
-                                    Enter a freshly updated and thoughtfully furnished peaceful home surrounded by
-                                    ancient
-                                    trees,
-                                    stone
-                                    walls, and open meadows.
-                                </p>
-                                <div class="my-4">
-                                    <p class="text-sm text-gray-600"><b>Rp. 90.000.00</b> sampai Rp. 100.000.00</p>
-                                    <div class="w-full relative h-2 bg-slate-400 rounded my-2">
-                                        <div class="absolute h-full bg-orange-500 rounded" style="width: 90%">
                                         </div>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <p class="text-sm text-gray-600 font-bold flex items-center gap-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                fill="currentColor" class="w-6 h-6">
-                                                <path
-                                                    d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z">
-                                                </path>
-                                            </svg>
-                                            23 Donasi
-                                        </p>
-                                        <div class="bg-gray-200 px-2 py-1 rounded" style="cursor: pointer">
-                                            <div class="w-5 h-5">
-                                                <svg viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                        stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <path
-                                                            d="M15 3C15 2.44772 15.4477 2 16 2C19.3137 2 22 4.68629 22 8V16C22 19.3137 19.3137 22 16 22H8C4.68629 22 2 19.3137 2 16C2 15.4477 2.44772 15 3 15C3.55228 15 4 15.4477 4 16C4 18.2091 5.79086 20 8 20H16C18.2091 20 20 18.2091 20 16V8C20 5.79086 18.2091 4 16 4C15.4477 4 15 3.55228 15 3Z"
-                                                            fill="rgb(51 65 85)"></path>
-                                                        <path
-                                                            d="M3.70663 12.7845L3.16104 12.2746L3.70664 12.7845C4.09784 12.3659 4.62287 11.8265 5.17057 11.3274C5.72852 10.8191 6.26942 10.3905 6.69641 10.1599C7.06268 9.96208 7.75042 9.84035 8.40045 9.84848C8.62464 9.85128 8.81365 9.86944 8.9559 9.89472C8.96038 10.5499 8.95447 11.7469 8.95145 12.2627C8.94709 13.0099 9.83876 13.398 10.3829 12.8878L14.9391 8.61636C15.2845 8.2926 15.2988 7.74908 14.971 7.4076L10.4132 2.65991C9.88293 2.10757 8.95 2.48291 8.95 3.24856V5.16793C8.5431 5.13738 8.0261 5.11437 7.47937 5.13009C6.5313 5.15734 5.30943 5.30257 4.4722 5.88397C4.36796 5.95636 4.26827 6.03539 4.17359 6.11781C2.49277 7.58092 2.11567 9.90795 1.8924 11.7685L1.87242 11.935C1.74795 12.9722 3.02541 13.5134 3.70663 12.7845ZM9.35701 11.7935L9.70204 12.1615L9.35701 11.7935C9.35715 11.7934 9.35729 11.7932 9.35744 11.7931L9.35701 11.7935Z"
-                                                            stroke="rgb(51 65 85)" stroke-width="1.5"
-                                                            stroke-linecap="round">
-                                                        </path>
-                                                    </g>
-                                                </svg>
+                                        <div class="p-6 pt-4 pb-4">
+                                            <div class="mb-3">
+                                                <h5
+                                                    class="block font-sans text-xl antialiased font-medium leading-snug tracking-normal text-blue-gray-900">
+                                                    {{ $project->title }}
+                                                </h5>
                                             </div>
+                                            <p
+                                                class="block font-sans text-base antialiased font-light leading-relaxed text-gray-700">
+                                                {{ Str::limit($project->description, 200) }}
+                                            </p>
+                                            <div class="my-4">
+                                                <p class="text-sm text-gray-600"><b>Rp.
+                                                        {{ number_format($project->collected_amount, 0, ',', '.') }}</b>
+                                                    sampai Rp.
+                                                    {{ number_format($project->target_amount, 0, ',', '.') }}</p>
+
+                                                @php
+                                                    $target_amount = $project->target_amount;
+                                                    $collected_amount = $project->collected_amount;
+                                                    $percent = round(($collected_amount / $target_amount) * 100);
+
+                                                @endphp
+
+                                                <div
+                                                    class="w-full relative h-2 bg-slate-400 rounded my-2 overflow-hidden">
+                                                    <div class="absolute h-full bg-orange-500 rounded"
+                                                        style="width: {{ $percent > '100' ? '100' : $percent }}%">
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between">
+                                                    <p class="text-sm text-gray-600 font-bold flex items-center gap-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                            fill="currentColor" class="w-6 h-6">
+                                                            <path
+                                                                d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z">
+                                                            </path>
+                                                        </svg>
+                                                        {{ $project->donations_count }} Donasi
+                                                    </p>
+                                                    <p class="bg-gray-200 px-2 py-1 rounded text-sm">
+
+                                                        @php
+                                                            $current_date = \Carbon\Carbon::now()->startOfDay();
+                                                            $target_date = \Carbon\Carbon::parse(
+                                                                $project->target_date,
+                                                            )->startOfDay();
+                                                            $days = $current_date->diffInDays($target_date);
+                                                            $days = $days > 0 ? $days : 0;
+                                                        @endphp
+                                                        {{ $days }} hari lagi
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <a href="{{ route('donation.show', $project->id) }}"
+                                                class="block w-full select-none rounded-lg bg-orange-500 text-center p-2 align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                                type="button">
+                                                Donasi
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ route('donation.show', 1) }}"
-                                    class="block w-full select-none rounded-lg bg-orange-500 text-center p-2 align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
-                                    Donasi
-                                </a>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        @endforeach
+                    @endif
+                @endforeach
             </div>
 
         </div>
     </div>
-
-
 </x-main>

@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasUuids;
     protected $fillable = [
         'image',
         'title',
         'description',
         'target_amount',
+        'content',
+        'target_date',
         'collected_amount',
         'is_active',
         'user_id',

@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount', 15, 2); // Jumlah donasi
             $table->boolean('is_verified')->default(false); // Status verifikasi manual
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('payment_method'); // Metode pembayaran manual (contoh: transfer bank)
+            $table->string('image')->nullable(); // Bukti pembayaran, bisa berupa URL gambar
+            $table->text('message')->nullable(); // Status konfirmasi admin
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KegiatanController extends Controller
 {
@@ -20,7 +23,8 @@ class KegiatanController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('kegiatan.tambah', compact('categories'));
     }
 
     /**
@@ -28,7 +32,29 @@ class KegiatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "title" => 'required|max:255',
+            "deskripsi" => 'required',
+            "content" => 'required',
+            "target_dana" => 'required',
+            "tanggal_akhir" => 'required|date',
+            "kategori" => 'required|exists:categories,id',
+            "gambar" => 'required|mimes:png,jpg,jpeg',
+        ]);
+        $image = $request->file('gambar')->store('gambar', 'public');
+        $project = Project::create([
+            'image' => $image,
+            'title' => $request->title,
+            'description' => $request->deskripsi,
+            'content' => $request->content,
+            'target_amount' => $request->target_dana,
+            'target_date' => $request->tanggal_akhir,
+            'is_active' => true,
+            'user_id' => Auth::user()->id,
+            'category_id' => $request->kategori,
+        ]);
+
+        return redirect()->route('kegiatan.index')->with('success', 'kegiatan / project berhasil dibuat');
     }
 
     /**
