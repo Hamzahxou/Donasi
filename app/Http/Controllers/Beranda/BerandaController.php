@@ -11,7 +11,9 @@ class BerandaController extends Controller
     public function beranda()
     {
         $categories = Category::with(['projects' => function ($query) {
-            $query->withCount('donations');
+            $query->withCount(['donations' => function ($query) {
+                $query->where('is_verified', true);
+            }]);
         }])->get();
         return view('welcome', compact('categories'));
     }

@@ -1,4 +1,54 @@
 <x-main title="show">
+
+    @push('styles')
+        <style>
+            .trix h1 {
+                font-size: 1.25rem !important;
+                line-height: 1.25rem !important;
+                margin-bottom: 1rem;
+                font-weight: 600;
+            }
+
+            .trix a:not(.no-underline) {
+                text-decoration: underline;
+            }
+
+            .trix a:visited {
+                color: green;
+            }
+
+            .trix ul {
+                list-style-type: disc;
+                padding-left: 1rem;
+            }
+
+            .trix ol {
+                list-style-type: decimal;
+                padding-left: 1rem;
+            }
+
+            .trix pre {
+                display: inline-block;
+                width: 100%;
+                vertical-align: top;
+                font-family: monospace;
+                font-size: 1.5em;
+                padding: 0.5em;
+                white-space: pre;
+                background-color: #eee;
+                overflow-x: auto;
+            }
+
+            .trix blockquote {
+                border: 0 solid #ccc;
+                border-left-width: 0px;
+                border-left-width: 0.3em;
+                margin-left: 0.3em;
+                padding-left: 0.6em;
+            }
+        </style>
+    @endpush
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="my-4">
             <h1 class="text-2xl font-bold text-center my-4 text-gray-900">{{ $project->title }}</h1>
@@ -90,7 +140,9 @@
                                 <hr>
                                 <br>
 
-                                {!! $project->content !!}
+                                <div class="trix">
+                                    {!! $project->content !!}
+                                </div>
                             </div>
                         </div>
                         <div x-show="openTab === 2" class="transition-all duration-300">
@@ -107,7 +159,7 @@
 
                 </div>
                 <div x-data="{ share: false }" class="bg-gray-200 rounded-md h-screen flex-initial lg:w-80  ">
-                    <div class="sticky top-0 z-10  w-full  flex flex-col items-center p-2 gap-2">
+                    <div class="w-full h-full  flex flex-col items-center p-2 gap-2 overflow-y-auto">
                         <div x-data="{ donasi: false }" class="w-full">
                             <x-primary-button x-on:click="donasi = true" class="w-full py-4">Donasi
                                 Sekarang</x-primary-button>
@@ -172,13 +224,7 @@
                                                 </label>
                                             </div>
                                         </div>
-
-                                        <div x-show="payment !== null">
-                                            <x-secondary-button x-on:click="payment = null">
-                                                kembali
-                                            </x-secondary-button>
-                                        </div>
-                                        <div x-show="payment === 'bank'">
+                                        {{-- <div x-show="payment === 'bank'">
                                             <form action="" method="post" class="w-full">
                                                 <x-text-input id="nominal" class="mt-1 block w-full uang p-4"
                                                     type="text" name="nominal" value="5000" required
@@ -201,83 +247,139 @@
                                                     Kirim
                                                 </x-primary-button>
                                             </form>
-                                        </div>
+                                        </div> --}}
 
-                                        <div x-show="payment === 'transfer'" class="relative">
-                                            <x-input-label class="w-full" for="text">Bank Negara
-                                                Indonesia(BNI)</x-input-label>
-                                            <small class="text-[10px] text-gray-600">Ke <b>Muhammad Hamzah
-                                                    Fansuri</b></small>
-                                            <div class="flex justify-center items-center w-full gap-2">
-                                                <x-text-input value="1945514054" class="w-full bg-gray-100"
-                                                    id="text" readonly />
-                                                <x-secondary-button class="ml-2" type="button" id="copy">
-                                                    <svg viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
-                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                            stroke-linejoin="round"></g>
-                                                        <g id="SVGRepo_iconCarrier">
-                                                            <path
-                                                                d="M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z"
-                                                                stroke="#1C274C" stroke-width="1.5"></path>
-                                                            <path
-                                                                d="M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5"
-                                                                stroke="#1C274C" stroke-width="1.5"></path>
-                                                        </g>
-                                                    </svg>
-                                                </x-secondary-button>
+                                        <div x-show="payment === 'transfer'" x-data="{ form: true }"
+                                            class="relative">
+                                            <div x-show="form">
+                                                <div x-show="payment !== null">
+                                                    <x-secondary-button x-on:click="payment = null">
+                                                        kembali
+                                                    </x-secondary-button>
+                                                </div>
+
+                                                <x-input-label class="w-full" for="text">Bank Negara
+                                                    Indonesia(BNI)</x-input-label>
+                                                <small class="text-[10px] text-gray-600">Ke <b>Muhammad Hamzah
+                                                        Fansuri</b></small>
+                                                <div class="flex justify-center items-center w-full gap-2">
+                                                    <x-text-input value="1945514054"
+                                                        class="w-full bg-gray-100 p-1 text-sm" id="text"
+                                                        readonly />
+                                                    <x-secondary-button class="ml-2" type="button" id="copy">
+                                                        <svg viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg" class="w-3 h-3">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                stroke-linejoin="round"></g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                <path
+                                                                    d="M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z"
+                                                                    stroke="#1C274C" stroke-width="1.5"></path>
+                                                                <path
+                                                                    d="M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5"
+                                                                    stroke="#1C274C" stroke-width="1.5"></path>
+                                                            </g>
+                                                        </svg>
+                                                    </x-secondary-button>
+                                                </div>
                                             </div>
                                             <div class="w-full my-2">
-                                                <form action="" method="post" enctype="multipart/form-data">
-                                                    <div class="my-2">
-                                                        <x-input-label class="w-full" for="namaAkun">Nama Akun
-                                                            bank</x-input-label>
-                                                        <x-text-input placeholder="Nama akun Bank" class="w-full"
-                                                            name="namaAkun" id="namaAkun" required autofocus />
-                                                        <x-input-error class="mt-2" :messages="$errors->get('namaAkun')" />
-                                                    </div>
-                                                    <div class="my-2">
-                                                        <x-input-label class="w-full"
-                                                            for="nominal_transfer">Nominal</x-input-label>
-                                                        <x-text-input placeholder="Nominal ditransfer"
-                                                            class="w-full uang" name="nominal" min="500"
-                                                            max="9999999999999.99" id="nominal_transfer" reuired />
-                                                        <x-input-error class="mt-2" :messages="$errors->get('nominal')" />
-                                                    </div>
-                                                    <label
-                                                        class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
-                                                        htmlFor="dropzone-file">
-                                                        <div class="flex justify-center flex-col items-center "
-                                                            id="preview-label">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="h-10 w-10 text-orange-800" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                                strokeWidth="2">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                                            </svg>
-
-                                                            <h2
-                                                                class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
-                                                                Bukti Transfer</h2>
-
-                                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah atau
-                                                                seret &
-                                                                lepas
-                                                                file Anda
-                                                                berkas PNG, JPG, JPEG</p>
-
-                                                            <input id="dropzone-file" type="file" class="hidden"
-                                                                name="category_image" onchange="previews(this)"
-                                                                accept="image/png, image/jpeg, image/jpg" />
-
+                                                <form action="{{ route('donation.store') }}" method="post"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div x-show="form">
+                                                        <input type="hidden" name="project_id"
+                                                            value="{{ $project->id }}">
+                                                        <div class="my-2">
+                                                            <x-input-label class="w-full" for="namaAkun">Nama Akun
+                                                                bank</x-input-label>
+                                                            <x-text-input placeholder="Nama akun Bank" class="w-full"
+                                                                name="namaAkun" id="namaAkun" required autofocus />
+                                                            <x-input-error class="mt-2" :messages="$errors->get('namaAkun')" />
                                                         </div>
-                                                        <img id="preview" class="w-full rounded-md">
-                                                    </label>
+                                                        <div class="my-2">
+                                                            <x-input-label class="w-full"
+                                                                for="nominal_transfer">Nominal</x-input-label>
+                                                            <x-text-input placeholder="Nominal ditransfer"
+                                                                class="w-full uang" name="nominal" min="500"
+                                                                max="9999999999999.99" id="nominal_transfer"
+                                                                reuired />
+                                                            <x-input-error class="mt-2" :messages="$errors->get('nominal')" />
+                                                        </div>
+                                                        <label
+                                                            class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                            htmlFor="dropzone-file">
+                                                            <div class="flex justify-center flex-col items-center "
+                                                                id="preview-label">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-10 w-10 text-orange-800" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    strokeWidth="2">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                                </svg>
 
-                                                    <x-primary-button type="submit"
-                                                        class="w-full mt-2">Kirim</x-primary-button>
+                                                                <h2
+                                                                    class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                                    Bukti Transfer</h2>
+
+                                                                <p class="mt-2 text-gray-500 tracking-wide">Unggah atau
+                                                                    seret &
+                                                                    lepas
+                                                                    file Anda
+                                                                    berkas PNG, JPG, JPEG</p>
+
+                                                                <input id="dropzone-file" type="file"
+                                                                    class="hidden" name="image"
+                                                                    onchange="previews(this)"
+                                                                    accept="image/png, image/jpeg, image/jpg" />
+
+                                                            </div>
+                                                            <img id="preview" class="w-full rounded-md">
+                                                        </label>
+
+                                                        <div class="w-full flex justify-between gap-2 mt-2">
+                                                            <x-primary-button class="w-full"
+                                                                type="submit">Kirim</x-primary-button>
+                                                            <x-secondary-button type="button"
+                                                                x-on:click="form = false">
+                                                                <svg viewBox="0 0 24 24" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    class="w-5 h-5">
+                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                    <g id="SVGRepo_tracerCarrier"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"></g>
+                                                                    <g id="SVGRepo_iconCarrier">
+                                                                        <path
+                                                                            d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                                                            stroke="#1C274C" stroke-width="2"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round"></path>
+                                                                    </g>
+                                                                </svg></x-secondary-button>
+                                                        </div>
+                                                    </div>
+                                                    <div x-show="!form">
+                                                        <x-secondary-button x-on:click="form = true">
+                                                            kembali
+                                                        </x-secondary-button>
+                                                        <div>
+                                                            <x-input-label class="w-full"
+                                                                for="pesan">Pesan</x-input-label>
+                                                            <textarea name="pesan" id="pesan"
+                                                                class="w-full p-2 border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm "
+                                                                placeholder="ketik pesan untuk donasi ini"></textarea>
+                                                            <x-input-error class="mt-2" :messages="$errors->get('pesan')" />
+                                                            <div>
+                                                                <x-primary-button x-on:click="form = true"
+                                                                    class="w-full">
+                                                                    Lanjut
+                                                                </x-primary-button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -325,7 +427,67 @@
                                             fill="#ffffff" />
                                     </svg></div>
                             </a>
+                        </div>
+                        <div class="bg-white w-full rounded-md overflow-x-hidden overflow-y-auto">
+                            <div class="bg-gray-100 py-2 px-4 ">
+                                <h2 class="text-lg font-semibold text-gray-800 ">Para donatur</h2>
+                            </div>
+                            <ul class="divide-y divide-gray-200">
+                                @forelse ($project->donations as $i=> $donation)
+                                    @php
+                                        $i++;
+                                    @endphp
+                                    <li class="py-4 px-6 border-b border-gray-200">
+                                        <div class="flex items-center ">
+                                            <span
+                                                class="text-gray-700 text-lg font-medium mr-4">{{ $i }}.</span>
 
+                                            @if ($donation->user->avatar)
+                                                <img src="{{ asset('storage/' . $donation->user->avatar) }}"
+                                                    alt="{{ $donation->user->name }}"
+                                                    class="w-7 h-7 rounded-full object-cover mr-4">
+                                            @else
+                                                <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $donation->user->username }}"
+                                                    alt="{{ $donation->user->name }}"
+                                                    class="w-7 h-7 rounded-full object-cover mr-4">
+                                            @endif
+                                            <div class="flex-1">
+                                                <h3 class="text-md font-medium text-gray-800">
+                                                    {{ Str::limit($donation->user->name, '16', '...') }}
+                                                </h3>
+                                                <p class="text-gray-600 text-base">Rp.
+                                                    {{ number_format($donation->amount, 0, ',', '.') }}</p>
+                                            </div>
+                                        </div>
+                                        <div x-data="{ open_{{ $i }}: false }">
+                                            <div class="w-full flex justify-end">
+                                                <button class="w-5 h-5"
+                                                    x-on:click="open_{{ $i }} = !open_{{ $i }}">
+                                                    <svg viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                            stroke-linejoin="round"></g>
+                                                        <g id="SVGRepo_iconCarrier">
+                                                            <path
+                                                                d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                                                stroke="#000000" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="mt-2" x-show="open_{{ $i }}">
+                                                <p class="text-sm text-gray-600">{{ $donation->message }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                @empty
+                                    <li class="text-gray-700 text-sm text-center p-5 font-medium mr-4">Tidak ada donasi
+                                    </li>
+                                @endforelse
+                            </ul>
                         </div>
                     </div>
                 </div>

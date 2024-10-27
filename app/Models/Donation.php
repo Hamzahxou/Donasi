@@ -7,11 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Donation extends Model
 {
     protected $fillable = [
+        'bank_account_name',
         'amount',
+        'payment_method',
         'is_verified',
+        'image',
+        'message',
         'user_id',
         'project_id',
     ];
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = str_replace('.', '', $value);
+    }
 
     public function user()
     {

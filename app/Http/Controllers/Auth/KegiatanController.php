@@ -15,7 +15,13 @@ class KegiatanController extends Controller
      */
     public function index(Request $request)
     {
-        return view('kegiatan.index');
+        $user = Auth::user();
+        // if ($user->role == 'admin') {
+        //     $projects = Project::paginate(10);
+        // } else {
+        $projects = Project::where('user_id', $user->id)->paginate(10);
+        // }
+        return view('kegiatan.index', compact('projects'));
     }
 
     /**
@@ -70,7 +76,12 @@ class KegiatanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        if ($project->user_id != Auth::user()->id) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
+        }
+        $categories = Category::all();
+        return view('kegiatan.edit', compact('project', 'categories'));
     }
 
     /**

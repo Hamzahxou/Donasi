@@ -1,4 +1,4 @@
-<x-app-layout title="{{ __('Tambah kegiatan') }}">
+<x-app-layout title="{{ __('Edit kegiatan') }}">
 
     @push('styles')
         <link rel="stylesheet" type="text/css" href="{{ asset('storage/assets/trix/trix.css') }}">
@@ -57,7 +57,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Tambah Kegiatan / Project
+            Edit Kegiatan / Project
         </h2>
     </x-slot>
     <div class="py-12">
@@ -75,19 +75,20 @@
                                 <div>
                                     <x-input-label for="title" :value="__('Judul Kegiatan / Project')" />
                                     <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
-                                        :value="old('title')" required autofocus />
+                                        :value="old('title', $project->title)" required autofocus />
                                     <x-input-error class="mt-2" :messages="$errors->get('title')" />
                                 </div>
                                 <div class="my-2">
                                     <x-input-label for="deskripsi" :value="__('Deskripsi')" />
                                     <textarea id="deskripsi" name="deskripsi" type="text"
                                         class="mt-1 block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm"
-                                        required rows="5" />{{ old('deskripsi') }}</textarea>
+                                        required rows="5" />{{ old('deskripsi', $project->description) }}</textarea>
                                     <x-input-error class="mt-2" :messages="$errors->get('deskripsi')" />
                                 </div>
                                 <div class="trix">
                                     <x-input-label for="x" :value="__('Konten')" />
-                                    <input id="x" type="hidden" value="{{ old('content') }}" name="content">
+                                    <input id="x" type="hidden" value="{{ old('content', $project->content) }}"
+                                        name="content">
                                     <trix-editor input="x"
                                         class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
                                     <x-input-error class="mt-2" :messages="$errors->get('content')" />
@@ -102,7 +103,7 @@
                                     <label
                                         class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
                                         htmlFor="dropzone-file">
-                                        <div class="flex justify-center flex-col items-center " id="preview-label">
+                                        <div class="hidden justify-center flex-col items-center " id="preview-label">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-orange-800"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                 strokeWidth="2">
@@ -122,7 +123,8 @@
                                                 onchange="ImgPreview(this)" accept="image/png, image/jpeg, image/jpg" />
 
                                         </div>
-                                        <img id="preview" class="w-full rounded-md">
+                                        <img id="preview" src="{{ asset('storage/' . $project->image) }}"
+                                            class="w-full rounded-md">
                                     </label>
                                     <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
                                 </div>
@@ -130,7 +132,7 @@
                                     <x-input-label for="target_dana" :value="__('Target Dana')" />
                                     <div class="relative">
                                         <x-text-input id="target_dana" name="target_dana" type="text"
-                                            class="mt-1 block w-full uang" :value="old('target_dana')" value="100.000"
+                                            class="mt-1 block w-full uang" :value="old('target_dana', $project->target_amount)" value="100.000"
                                             min="0" max="9999999999999.99" required autofocus />
                                         <span class="absolute top-0 left-1 text-[10px] text-gray-700">Rp.</span>
                                     </div>
@@ -139,7 +141,7 @@
                                 <div class="my-2">
                                     <x-input-label for="tanggal_akhir" :value="__('Tanggal Akhir')" />
                                     <x-text-input id="tanggal_akhir" name="tanggal_akhir" type="date"
-                                        class="mt-1 block w-full" :value="old('tanggal_akhir')" required autofocus />
+                                        class="mt-1 block w-full" :value="old('tanggal_akhir', $project->target_date)" required autofocus />
                                     <x-input-error class="mt-2" :messages="$errors->get('tanggal_akhir')" />
                                 </div>
 
@@ -148,7 +150,9 @@
                                     <select name="kategori" id="kategori"
                                         class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm">
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}
+                                            <option value="{{ $category->id }}"
+                                                {{ $project->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -157,7 +161,7 @@
                                 </div>
                                 <div>
                                     <x-primary-button type="submit">
-                                        {{ __('Buat') }}
+                                        {{ __('Simpan') }}
                                     </x-primary-button>
                                 </div>
                             </div>

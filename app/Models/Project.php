@@ -21,6 +21,15 @@ class Project extends Model
         'category_id',
     ];
 
+    public function setTargetAmountAttribute($value)
+    {
+        $this->attributes['target_amount'] = str_replace('.', '', $value);
+    }
+    public function setCollectedAmountAttribute($value)
+    {
+        $this->attributes['collected_amount'] = str_replace('.', '', $value);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

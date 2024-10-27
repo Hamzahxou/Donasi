@@ -26,17 +26,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    Route::prefix('midtrans')->middleware(MidtransConfig::class)->group(function () {
-        Route::get('/pay', function () {
-            return view('auth.midtrans');
-        });
-
-        Route::post('/get-snap-token', [PaymentController::class, 'getSnapToken']);
-    });
-
+    // Route::prefix('midtrans')->middleware(MidtransConfig::class)->group(function () {
+    //     Route::get('/pay', function () {
+    //         return view('auth.midtrans');
+    //     });
+    //     Route::post('/get-snap-token', [PaymentController::class, 'getSnapToken']);
+    // });
 
     Route::resource('kegiatan', KegiatanController::class);
+
+    Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
 
 
     Route::prefix('admin')->middleware(Admin::class)->group(function () {
