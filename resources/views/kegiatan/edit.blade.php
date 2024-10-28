@@ -238,75 +238,104 @@
 
                             </form>
                         </div>
-                        {{--
+
                         @forelse ($project->projectUpdates as $i => $projectUpdates)
-                            <form method="post" action="" class="space-y-6" enctype="multipart/form-data"
-                                novalidate>
-                                @csrf
-                                @method('PUT')
-                                <div class="block lg:flex gap-2 w-full">
-                                    <div class="lg:w-3/5">
-                                        <div class="trix">
-                                            <x-input-label for="x_{{ $i }}" :value="__('Konten')" />
-                                            <input id="x_{{ $i }}" type="hidden"
-                                                value="{{ old('content', $project->content) }}" name="content">
-                                            <trix-editor input="x_{{ $i }}"
-                                                class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
-                                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
-                                        </div>
+                            <div class="py-5 px-3 rounded-md  border-2 border-dotted border-orange-400 mb-3">
+                                <details class="group">
+                                    <summary
+                                        class="flex justify-between items-center font-medium cursor-pointer list-none">
+                                        <span>
+                                            {{ \Carbon\Carbon::parse($projectUpdates->created_at)->isoFormat('dddd, D MMMM YYYY') }}
+                                        </span>
+                                        <span class="transition group-open:rotate-180">
+                                            <svg fill="none" height="24" shape-rendering="geometricPrecision"
+                                                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="1.5" viewBox="0 0 24 24" width="24">
+                                                <path d="M6 9l6 6 6-6"></path>
+                                            </svg>
+                                        </span>
+                                    </summary>
 
-
-
-                                    </div>
-                                    <div class="lg:w-2/5">
-                                        <div>
-                                            <label
-                                                class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
-                                                htmlFor="dropzone-file">
-                                                <div class="hidden justify-center flex-col items-center label-init">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="h-10 w-10 text-orange-800" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                                    </svg>
-
-                                                    <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
-                                                        Gambar Kegiatan / Peoject</h2>
-
-                                                    <p class="mt-2 text-gray-500 tracking-wide">Unggah
-                                                        file Anda
-                                                        <b>berkas PNG, JPG, JPEG</b>
-                                                    </p>
-
-                                                    <input id="dropzone-file" type="file" class="hidden"
-                                                        name="gambar" onchange="ImgPreview(this)"
-                                                        accept="image/png, image/jpeg, image/jpg" />
-
+                                    <p class="text-neutral-600 mt-3 group-open:animate-fadeIn">
+                                    <form method="post" action="" class="space-y-6"
+                                        enctype="multipart/form-data" novalidate>
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="block lg:flex gap-2 w-full">
+                                            <div class="lg:w-3/5">
+                                                <div class="trix">
+                                                    <x-input-label for="x_{{ $i }}" :value="__('Konten')" />
+                                                    <input id="x_{{ $i }}" type="hidden"
+                                                        value="{{ old('content', $project->content) }}"
+                                                        name="content">
+                                                    <trix-editor input="x_{{ $i }}"
+                                                        class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
+                                                    <x-input-error class="mt-2" :messages="$errors->get('content')" />
                                                 </div>
-                                                <img id="preview" src="{{ asset('storage/' . $project->image) }}"
-                                                    class="w-full rounded-md">
-                                            </label>
-                                            <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
-                                        </div>
-                                        <div class="my-2">
-                                            <x-primary-button type="submit">
-                                                {{ __('Simpan') }}
-                                            </x-primary-button>
-                                        </div>
-                                    </div>
-                                </div>
 
-                            </form>
+
+
+                                            </div>
+                                            <div class="lg:w-2/5">
+                                                <div>
+                                                    <label
+                                                        class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                        htmlFor="dropzone-file">
+                                                        <div
+                                                            class="hidden justify-center flex-col items-center label-init">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="h-10 w-10 text-orange-800" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                strokeWidth="2">
+                                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                            </svg>
+
+                                                            <h2
+                                                                class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                                Gambar Kegiatan / Peoject</h2>
+
+                                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah
+                                                                file Anda
+                                                                <b>berkas PNG, JPG, JPEG</b>
+                                                            </p>
+
+                                                            <input id="dropzone-file" type="file" class="hidden"
+                                                                name="gambar" onchange="ImgPreview(this)"
+                                                                accept="image/png, image/jpeg, image/jpg" />
+
+                                                        </div>
+                                                        <img id="preview"
+                                                            src="{{ asset('storage/' . $project->image) }}"
+                                                            class="w-full rounded-md">
+                                                    </label>
+                                                    <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
+                                                </div>
+                                                <div class="my-2 flex gap-3 flex-wrap">
+                                                    <x-primary-button type="submit">
+                                                        {{ __('Ubah') }}
+                                                    </x-primary-button>
+                                                    <x-danger-button>Hapus</x-danger-button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                    </p>
+                                </details>
+                            </div>
                         @empty
                             <p class="text-center text-gray-500">Tidak ada pembaruan</p>
-                        @endforelse --}}
+                        @endforelse
                     </div>
                 </section>
 
             </div>
         </div>
     </div>
+
+
+
 
     @push('script')
         <script src="{{ asset('storage/assets/js/jquery-3.7.1.js') }}"></script>
