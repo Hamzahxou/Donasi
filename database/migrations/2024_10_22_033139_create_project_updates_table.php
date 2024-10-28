@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_updates', function (Blueprint $table) {
             $table->id();
             $table->string('image')->nullable(); // Gambar pembaruan
-            $table->text('update_content'); // Konten pembaruan
+            $table->longText('update_content'); // Konten pembaruan
             $table->foreignUuid('project_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

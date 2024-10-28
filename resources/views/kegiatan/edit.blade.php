@@ -64,12 +64,20 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
 
-                <section>
-                    <a href="{{ route('kegiatan.index') }}"
-                        class="mb-2 inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">{{ __('kembali') }}</a>
-                    <form method="post" action="{{ route('kegiatan.store') }}" class="space-y-6"
-                        enctype="multipart/form-data" novalidate>
+                <section x-data="{ open: 1 }">
+                    <div class="flex justify-between items-center">
+                        <a x-show="open === 1" href="{{ route('kegiatan.index') }}"
+                            class="mb-2 inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">kembali</a>
+                        <x-secondary-button x-show="open === 2" type="button"
+                            x-on:click="open = 1">kembali</x-secondary-button>
+
+                        <x-secondary-button type="button" x-on:click="open = 2" x-show="open === 1">Kegiatan
+                            terbaru</x-secondary-button>
+                    </div>
+                    <form x-show="open === 1" method="post" action="{{ route('kegiatan.update', $project->id) }}"
+                        class="space-y-6" enctype="multipart/form-data" novalidate>
                         @csrf
+                        @method('PUT')
                         <div class="block lg:flex gap-2 w-full">
                             <div class="lg:w-3/5">
                                 <div>
@@ -103,7 +111,7 @@
                                     <label
                                         class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
                                         htmlFor="dropzone-file">
-                                        <div class="hidden justify-center flex-col items-center " id="preview-label">
+                                        <div class="hidden justify-center flex-col items-center label-init">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-orange-800"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                                 strokeWidth="2">
@@ -114,10 +122,10 @@
                                             <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
                                                 Gambar Kegiatan / Peoject</h2>
 
-                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah atau seret &
-                                                lepas
+                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah
                                                 file Anda
-                                                berkas PNG, JPG, JPEG</p>
+                                                <b>berkas PNG, JPG, JPEG</b>
+                                            </p>
 
                                             <input id="dropzone-file" type="file" class="hidden" name="gambar"
                                                 onchange="ImgPreview(this)" accept="image/png, image/jpeg, image/jpg" />
@@ -132,16 +140,18 @@
                                     <x-input-label for="target_dana" :value="__('Target Dana')" />
                                     <div class="relative">
                                         <x-text-input id="target_dana" name="target_dana" type="text"
-                                            class="mt-1 block w-full uang" :value="old('target_dana', $project->target_amount)" value="100.000"
-                                            min="0" max="9999999999999.99" required autofocus />
-                                        <span class="absolute top-0 left-1 text-[10px] text-gray-700">Rp.</span>
+                                            class="mt-1 block w-full uang" :value="old(
+                                                'target_dana',
+                                                number_format($project->target_amount, 0, ',', '.'),
+                                            )" required />
+                                        <span class="absolute top-0 left-1 text-[10px] text-gray-700">Rp. </span>
                                     </div>
                                     <x-input-error class="mt-2" :messages="$errors->get('target_dana')" />
                                 </div>
                                 <div class="my-2">
                                     <x-input-label for="tanggal_akhir" :value="__('Tanggal Akhir')" />
                                     <x-text-input id="tanggal_akhir" name="tanggal_akhir" type="date"
-                                        class="mt-1 block w-full" :value="old('tanggal_akhir', $project->target_date)" required autofocus />
+                                        class="mt-1 block w-full" :value="old('tanggal_akhir', $project->target_date)" required />
                                     <x-input-error class="mt-2" :messages="$errors->get('tanggal_akhir')" />
                                 </div>
 
@@ -168,6 +178,130 @@
                         </div>
 
                     </form>
+                    <div x-show="open === 2">
+                        <div x-data="{ tambah: false }" class="my-4">
+                            <x-primary-button type="button" x-on:click="tambah = !tambah" class="mx-auto">
+                                {{ __('Tambah pembaruan') }}
+                            </x-primary-button>
+
+                            <form x-show="tambah == true" method="post" action="" class="space-y-6"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="block lg:flex gap-2 w-full">
+                                    <div class="lg:w-3/5">
+                                        <div class="trix">
+                                            <x-input-label for="x_tambah" :value="__('Konten')" />
+                                            <input id="x_tambah" type="hidden" value="{{ old('content') }}"
+                                                name="content">
+                                            <trix-editor input="x_tambah"
+                                                class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
+                                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                                        </div>
+                                    </div>
+                                    <div class="lg:w-2/5">
+                                        <div>
+                                            <label
+                                                class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                htmlFor="dropzone-file">
+                                                <div class="flex justify-center flex-col items-center label-init">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-10 w-10 text-orange-800" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                    </svg>
+
+                                                    <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                        Gambar Kegiatan / Peoject</h2>
+
+                                                    <p class="mt-2 text-gray-500 tracking-wide">Unggah
+                                                        file Anda
+                                                        <b>berkas PNG, JPG, JPEG</b>
+                                                    </p>
+
+                                                    <input id="dropzone-file" type="file" class="hidden"
+                                                        name="gambar" onchange="ImgPreview(this)"
+                                                        accept="image/png, image/jpeg, image/jpg" />
+
+                                                </div>
+                                                <img id="preview" class="w-full rounded-md">
+                                            </label>
+                                            <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
+                                        </div>
+                                        <div class="my-2">
+                                            <x-primary-button type="submit">
+                                                {{ __('Tambah') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        {{--
+                        @forelse ($project->projectUpdates as $i => $projectUpdates)
+                            <form method="post" action="" class="space-y-6" enctype="multipart/form-data"
+                                novalidate>
+                                @csrf
+                                @method('PUT')
+                                <div class="block lg:flex gap-2 w-full">
+                                    <div class="lg:w-3/5">
+                                        <div class="trix">
+                                            <x-input-label for="x_{{ $i }}" :value="__('Konten')" />
+                                            <input id="x_{{ $i }}" type="hidden"
+                                                value="{{ old('content', $project->content) }}" name="content">
+                                            <trix-editor input="x_{{ $i }}"
+                                                class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
+                                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="lg:w-2/5">
+                                        <div>
+                                            <label
+                                                class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                htmlFor="dropzone-file">
+                                                <div class="hidden justify-center flex-col items-center label-init">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="h-10 w-10 text-orange-800" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                    </svg>
+
+                                                    <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                        Gambar Kegiatan / Peoject</h2>
+
+                                                    <p class="mt-2 text-gray-500 tracking-wide">Unggah
+                                                        file Anda
+                                                        <b>berkas PNG, JPG, JPEG</b>
+                                                    </p>
+
+                                                    <input id="dropzone-file" type="file" class="hidden"
+                                                        name="gambar" onchange="ImgPreview(this)"
+                                                        accept="image/png, image/jpeg, image/jpg" />
+
+                                                </div>
+                                                <img id="preview" src="{{ asset('storage/' . $project->image) }}"
+                                                    class="w-full rounded-md">
+                                            </label>
+                                            <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
+                                        </div>
+                                        <div class="my-2">
+                                            <x-primary-button type="submit">
+                                                {{ __('Simpan') }}
+                                            </x-primary-button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        @empty
+                            <p class="text-center text-gray-500">Tidak ada pembaruan</p>
+                        @endforelse --}}
+                    </div>
                 </section>
 
             </div>
@@ -191,8 +325,9 @@
                 const extension_available = ['png', 'jpg', 'jpeg'];
                 const extension_file = file['type'].split('/')[1];
                 if (extension_available.includes(extension_file)) {
-                    document.getElementById('preview-label').classList.add('hidden')
-                    document.getElementById('preview').src = URL.createObjectURL(file);
+                    e.parentElement.classList.add('hidden')
+                    e.parentElement.classList.remove('flex')
+                    e.parentElement.parentElement.querySelector('img').src = URL.createObjectURL(file);
                 }
             }
         </script>

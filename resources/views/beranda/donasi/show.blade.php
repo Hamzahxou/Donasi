@@ -112,10 +112,10 @@
         </div>
         <div class="my-6">
             <div class="block lg:flex gap-2">
-                <div class="h-screen flex-1">
+                <div class="min-h-screen flex-1">
                     <div class="w-9/12 mx-auto">
-                        <img src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1470&amp;q=80"
-                            alt="ui/ux review check" class="w-full rounded-md" />
+                        <img src="{{ asset('storage/' . $project->image) }}" alt="ui/ux review check"
+                            class="w-full rounded-md" />
                     </div>
 
                     <div x-data="{ openTab: 1 }" class="my-8">
@@ -161,232 +161,274 @@
                 <div x-data="{ share: false }" class="bg-gray-200 rounded-md h-screen flex-initial lg:w-80  ">
                     <div class="w-full h-full  flex flex-col items-center p-2 gap-2 overflow-y-auto">
                         <div x-data="{ donasi: false }" class="w-full">
-                            <x-primary-button x-on:click="donasi = true" class="w-full py-4">Donasi
-                                Sekarang</x-primary-button>
-                            <div x-show="donasi"
-                                class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
-                                <div
-                                    class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden ">
-                                    <button x-on:click="donasi = false"
-                                        class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                    <!-- component -->
-                                    <!-- This is an example component -->
-                                    <div x-data="{ payment: null }" class='pb-8 mx-auto space-y-4'>
-                                        <div x-show="payment === null" class="space-y-4">
-                                            <p class="text-sm font-medium text-center text-neutral-500">
-                                                Pilih Metode Donasi
-                                            </p>
-                                            {{-- <div class="relative" x-on:click="payment = 'bank'">
-                                            <input type="radio" name="options" id="option1-checkbox" value="1"
-                                                class="hidden peer">
-                                            <label for="option1-checkbox"
-                                                class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
-                                                <div class="flex items-center space-x-5">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
-                                                        class="w-10 h-10">
-                                                        <path
-                                                            d="M535 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l64 64c4.5 4.5 7 10.6 7 17s-2.5 12.5-7 17l-64 64c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l23-23L384 112c-13.3 0-24-10.7-24-24s10.7-24 24-24l174.1 0L535 41zM105 377l-23 23L256 400c13.3 0 24 10.7 24 24s-10.7 24-24 24L81.9 448l23 23c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L7 441c-4.5-4.5-7-10.6-7-17s2.5-12.5 7-17l64-64c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zM96 64l241.9 0c-3.7 7.2-5.9 15.3-5.9 24c0 28.7 23.3 52 52 52l117.4 0c-4 17 .6 35.5 13.8 48.8c20.3 20.3 53.2 20.3 73.5 0L608 169.5 608 384c0 35.3-28.7 64-64 64l-241.9 0c3.7-7.2 5.9-15.3 5.9-24c0-28.7-23.3-52-52-52l-117.4 0c4-17-.6-35.5-13.8-48.8c-20.3-20.3-53.2-20.3-73.5 0L32 342.5 32 128c0-35.3 28.7-64 64-64zm64 64l-64 0 0 64c35.3 0 64-28.7 64-64zM544 320c-35.3 0-64 28.7-64 64l64 0 0-64zM320 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192z"
-                                                            fill="#1C274C" />
-                                                    </svg>
-                                                    <div class="flex flex-col justify-start">
-                                                        <div class="w-full text-lg font-semibold">Midtrans</div>
-                                                        <div class="w-full text-sm opacity-60">Layanan lebih mudah
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </label>
-                                        </div> --}}
-                                            <div class="relative" x-on:click="payment = 'transfer'">
-                                                <input type="radio" name="options" id="option2-checkbox"
-                                                    value="2" class="hidden peer">
-                                                <label for="option2-checkbox"
-                                                    class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-orange-400 peer-checked:text-neutral-900 peer-checked:bg-orange-200/50 hover:text-neutral-900 hover:border-neutral-300">
-                                                    <div class="flex items-center space-x-5">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                                            class="w-10 h-10">
-                                                            <path
-                                                                d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-224c0-35.3-28.7-64-64-64L80 128c-8.8 0-16-7.2-16-16s7.2-16 16-16l368 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L64 32zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
-                                                                fill="#1C274C" />
-                                                        </svg>
-                                                        <div class="flex flex-col justify-start">
-                                                            <div class="w-full text-lg font-semibold">Transfer</div>
-                                                            <div class="w-full text-sm opacity-60">Layanan kontrol
-                                                                manual
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        {{-- <div x-show="payment === 'bank'">
-                                            <form action="" method="post" class="w-full">
-                                                <x-text-input id="nominal" class="mt-1 block w-full uang p-4"
-                                                    type="text" name="nominal" value="5000" required
-                                                    autofocus />
-                                                <div class="flex gap-2 flex-wrap my-3">
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '5.000'">Rp.5.000</x-secondary-button>
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '10.000'">Rp.10.000</x-secondary-button>
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '20.000'">Rp.20.000</x-secondary-button>
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '50.000'">Rp.50.000</x-secondary-button>
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '100.000'">Rp.100.000</x-secondary-button>
-                                                    <x-secondary-button type="button"
-                                                        onclick="document.getElementById('nominal').value = '500.000'">Rp.500.000</x-secondary-button>
-                                                </div>
-                                                <x-primary-button type="submit" class="w-full">
-                                                    Kirim
-                                                </x-primary-button>
-                                            </form>
-                                        </div> --}}
+                            @auth
 
-                                        <div x-show="payment === 'transfer'" x-data="{ form: true }"
-                                            class="relative">
-                                            <div x-show="form">
-                                                <div x-show="payment !== null">
-                                                    <x-secondary-button x-on:click="payment = null">
-                                                        kembali
-                                                    </x-secondary-button>
-                                                </div>
-
-                                                <x-input-label class="w-full" for="text">Bank Negara
-                                                    Indonesia(BNI)</x-input-label>
-                                                <small class="text-[10px] text-gray-600">Ke <b>Muhammad Hamzah
-                                                        Fansuri</b></small>
-                                                <div class="flex justify-center items-center w-full gap-2">
-                                                    <x-text-input value="1945514054"
-                                                        class="w-full bg-gray-100 p-1 text-sm" id="text"
-                                                        readonly />
-                                                    <x-secondary-button class="ml-2" type="button" id="copy">
-                                                        <svg viewBox="0 0 24 24" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg" class="w-3 h-3">
-                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                                stroke-linejoin="round"></g>
-                                                            <g id="SVGRepo_iconCarrier">
-                                                                <path
-                                                                    d="M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z"
-                                                                    stroke="#1C274C" stroke-width="1.5"></path>
-                                                                <path
-                                                                    d="M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5"
-                                                                    stroke="#1C274C" stroke-width="1.5"></path>
-                                                            </g>
-                                                        </svg>
-                                                    </x-secondary-button>
-                                                </div>
-                                            </div>
-                                            <div class="w-full my-2">
-                                                <form action="{{ route('donation.store') }}" method="post"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div x-show="form">
-                                                        <input type="hidden" name="project_id"
-                                                            value="{{ $project->id }}">
-                                                        <div class="my-2">
-                                                            <x-input-label class="w-full" for="namaAkun">Nama Akun
-                                                                bank</x-input-label>
-                                                            <x-text-input placeholder="Nama akun Bank" class="w-full"
-                                                                name="namaAkun" id="namaAkun" required autofocus />
-                                                            <x-input-error class="mt-2" :messages="$errors->get('namaAkun')" />
-                                                        </div>
-                                                        <div class="my-2">
-                                                            <x-input-label class="w-full"
-                                                                for="nominal_transfer">Nominal</x-input-label>
-                                                            <x-text-input placeholder="Nominal ditransfer"
-                                                                class="w-full uang" name="nominal" min="500"
-                                                                max="9999999999999.99" id="nominal_transfer"
-                                                                reuired />
-                                                            <x-input-error class="mt-2" :messages="$errors->get('nominal')" />
-                                                        </div>
-                                                        <label
-                                                            class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
-                                                            htmlFor="dropzone-file">
-                                                            <div class="flex justify-center flex-col items-center "
-                                                                id="preview-label">
+                                @if ($project->is_active)
+                                    <x-primary-button x-on:click="donasi = true" class="w-full py-4">Donasi
+                                        Sekarang</x-primary-button>
+                                    <div x-show="donasi"
+                                        class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
+                                        <div
+                                            class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden ">
+                                            <button x-on:click="donasi = false"
+                                                class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                            <!-- component -->
+                                            <!-- This is an example component -->
+                                            <div x-data="{ payment: null }" class='pb-8 mx-auto space-y-4'>
+                                                <div x-show="payment === null" class="space-y-4">
+                                                    <p class="text-sm font-medium text-center text-neutral-500">
+                                                        Pilih Metode Donasi
+                                                    </p>
+                                                    {{-- <div class="relative" x-on:click="payment = 'bank'">
+                                         <input type="radio" name="options" id="option1-checkbox" value="1"
+                                             class="hidden peer">
+                                         <label for="option1-checkbox"
+                                             class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-blue-400 peer-checked:text-neutral-900 peer-checked:bg-blue-200/50 hover:text-neutral-900 hover:border-neutral-300">
+                                             <div class="flex items-center space-x-5">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"
+                                                     class="w-10 h-10">
+                                                     <path
+                                                         d="M535 41c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l64 64c4.5 4.5 7 10.6 7 17s-2.5 12.5-7 17l-64 64c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l23-23L384 112c-13.3 0-24-10.7-24-24s10.7-24 24-24l174.1 0L535 41zM105 377l-23 23L256 400c13.3 0 24 10.7 24 24s-10.7 24-24 24L81.9 448l23 23c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L7 441c-4.5-4.5-7-10.6-7-17s2.5-12.5 7-17l64-64c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zM96 64l241.9 0c-3.7 7.2-5.9 15.3-5.9 24c0 28.7 23.3 52 52 52l117.4 0c-4 17 .6 35.5 13.8 48.8c20.3 20.3 53.2 20.3 73.5 0L608 169.5 608 384c0 35.3-28.7 64-64 64l-241.9 0c3.7-7.2 5.9-15.3 5.9-24c0-28.7-23.3-52-52-52l-117.4 0c4-17-.6-35.5-13.8-48.8c-20.3-20.3-53.2-20.3-73.5 0L32 342.5 32 128c0-35.3 28.7-64 64-64zm64 64l-64 0 0 64c35.3 0 64-28.7 64-64zM544 320c-35.3 0-64 28.7-64 64l64 0 0-64zM320 352a96 96 0 1 0 0-192 96 96 0 1 0 0 192z"
+                                                         fill="#1C274C" />
+                                                 </svg>
+                                                 <div class="flex flex-col justify-start">
+                                                     <div class="w-full text-lg font-semibold">Midtrans</div>
+                                                     <div class="w-full text-sm opacity-60">Layanan lebih mudah
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </label>
+                                     </div> --}}
+                                                    <div class="relative" x-on:click="payment = 'transfer'">
+                                                        <input type="radio" name="options" id="option2-checkbox"
+                                                            value="2" class="hidden peer">
+                                                        <label for="option2-checkbox"
+                                                            class="inline-flex items-center justify-between w-full p-5 bg-white border-2 rounded-lg cursor-pointer group border-neutral-200/70 text-neutral-600 peer-checked:border-orange-400 peer-checked:text-neutral-900 peer-checked:bg-orange-200/50 hover:text-neutral-900 hover:border-neutral-300">
+                                                            <div class="flex items-center space-x-5">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-10 w-10 text-orange-800" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    strokeWidth="2">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                                    viewBox="0 0 512 512" class="w-10 h-10">
+                                                                    <path
+                                                                        d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-224c0-35.3-28.7-64-64-64L80 128c-8.8 0-16-7.2-16-16s7.2-16 16-16l368 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L64 32zM416 272a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                                                                        fill="#1C274C" />
                                                                 </svg>
-
-                                                                <h2
-                                                                    class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
-                                                                    Bukti Transfer</h2>
-
-                                                                <p class="mt-2 text-gray-500 tracking-wide">Unggah atau
-                                                                    seret &
-                                                                    lepas
-                                                                    file Anda
-                                                                    berkas PNG, JPG, JPEG</p>
-
-                                                                <input id="dropzone-file" type="file"
-                                                                    class="hidden" name="image"
-                                                                    onchange="previews(this)"
-                                                                    accept="image/png, image/jpeg, image/jpg" />
-
+                                                                <div class="flex flex-col justify-start">
+                                                                    <div class="w-full text-lg font-semibold">Transfer
+                                                                    </div>
+                                                                    <div class="w-full text-sm opacity-60">Layanan kontrol
+                                                                        manual
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <img id="preview" class="w-full rounded-md">
                                                         </label>
+                                                    </div>
+                                                </div>
+                                                {{-- <div x-show="payment === 'bank'">
+                                         <form action="" method="post" class="w-full">
+                                             <x-text-input id="nominal" class="mt-1 block w-full uang p-4"
+                                                 type="text" name="nominal" value="5000" required
+                                                 autofocus />
+                                             <div class="flex gap-2 flex-wrap my-3">
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '5.000'">Rp.5.000</x-secondary-button>
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '10.000'">Rp.10.000</x-secondary-button>
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '20.000'">Rp.20.000</x-secondary-button>
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '50.000'">Rp.50.000</x-secondary-button>
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '100.000'">Rp.100.000</x-secondary-button>
+                                                 <x-secondary-button type="button"
+                                                     onclick="document.getElementById('nominal').value = '500.000'">Rp.500.000</x-secondary-button>
+                                             </div>
+                                             <x-primary-button type="submit" class="w-full">
+                                                 Kirim
+                                             </x-primary-button>
+                                         </form>
+                                     </div> --}}
 
-                                                        <div class="w-full flex justify-between gap-2 mt-2">
-                                                            <x-primary-button class="w-full"
-                                                                type="submit">Kirim</x-primary-button>
-                                                            <x-secondary-button type="button"
-                                                                x-on:click="form = false">
+                                                <div x-show="payment === 'transfer'" x-data="{ form: true }"
+                                                    class="relative">
+                                                    <div x-show="form">
+                                                        <div x-show="payment !== null">
+                                                            <x-secondary-button x-on:click="payment = null">
+                                                                kembali
+                                                            </x-secondary-button>
+                                                        </div>
+
+                                                        <x-input-label class="w-full" for="text">Bank Negara
+                                                            Indonesia(BNI)</x-input-label>
+                                                        <small class="text-[10px] text-gray-600">Ke <b>Muhammad Hamzah
+                                                                Fansuri</b></small>
+                                                        <div class="flex justify-center items-center w-full gap-2">
+                                                            <x-text-input value="1945514054"
+                                                                class="w-full bg-gray-100 p-1 text-sm" id="text"
+                                                                readonly />
+                                                            <x-secondary-button class="ml-2" type="button"
+                                                                id="copy">
                                                                 <svg viewBox="0 0 24 24" fill="none"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    class="w-5 h-5">
+                                                                    xmlns="http://www.w3.org/2000/svg" class="w-3 h-3">
                                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                                    <g id="SVGRepo_tracerCarrier"
-                                                                        stroke-linecap="round"
+                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
                                                                         stroke-linejoin="round"></g>
                                                                     <g id="SVGRepo_iconCarrier">
                                                                         <path
-                                                                            d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
-                                                                            stroke="#1C274C" stroke-width="2"
-                                                                            stroke-linecap="round"
-                                                                            stroke-linejoin="round"></path>
+                                                                            d="M6 11C6 8.17157 6 6.75736 6.87868 5.87868C7.75736 5 9.17157 5 12 5H15C17.8284 5 19.2426 5 20.1213 5.87868C21 6.75736 21 8.17157 21 11V16C21 18.8284 21 20.2426 20.1213 21.1213C19.2426 22 17.8284 22 15 22H12C9.17157 22 7.75736 22 6.87868 21.1213C6 20.2426 6 18.8284 6 16V11Z"
+                                                                            stroke="#1C274C" stroke-width="1.5"></path>
+                                                                        <path
+                                                                            d="M6 19C4.34315 19 3 17.6569 3 16V10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H15C16.6569 2 18 3.34315 18 5"
+                                                                            stroke="#1C274C" stroke-width="1.5"></path>
                                                                     </g>
-                                                                </svg></x-secondary-button>
+                                                                </svg>
+                                                            </x-secondary-button>
                                                         </div>
                                                     </div>
-                                                    <div x-show="!form">
-                                                        <x-secondary-button x-on:click="form = true">
-                                                            kembali
-                                                        </x-secondary-button>
-                                                        <div>
-                                                            <x-input-label class="w-full"
-                                                                for="pesan">Pesan</x-input-label>
-                                                            <textarea name="pesan" id="pesan"
-                                                                class="w-full p-2 border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm "
-                                                                placeholder="ketik pesan untuk donasi ini"></textarea>
-                                                            <x-input-error class="mt-2" :messages="$errors->get('pesan')" />
-                                                            <div>
-                                                                <x-primary-button x-on:click="form = true"
-                                                                    class="w-full">
-                                                                    Lanjut
-                                                                </x-primary-button>
+                                                    <div class="w-full my-2">
+                                                        <form action="{{ route('donation.store') }}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            @csrf
+                                                            <div x-show="form">
+                                                                <input type="hidden" name="project_id"
+                                                                    value="{{ $project->id }}">
+                                                                <div class="my-2">
+                                                                    <x-input-label class="w-full" for="namaAkun">Nama Akun
+                                                                        bank</x-input-label>
+                                                                    <x-text-input placeholder="Nama akun Bank"
+                                                                        class="w-full" name="namaAkun" :value="old('namaAkun')"
+                                                                        id="namaAkun" required autofocus />
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('namaAkun')" />
+                                                                </div>
+                                                                <div class="my-2">
+                                                                    <x-input-label class="w-full"
+                                                                        for="nominal_transfer">Nominal</x-input-label>
+                                                                    <x-text-input placeholder="Nominal ditransfer"
+                                                                        class="w-full uang" name="nominal"
+                                                                        :value="old('nominal')" min="500"
+                                                                        max="9999999999999.99" id="nominal_transfer"
+                                                                        reuired />
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('nominal')" />
+                                                                </div>
+                                                                <label
+                                                                    class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                                    htmlFor="dropzone-file">
+                                                                    <div class="flex justify-center flex-col items-center "
+                                                                        id="preview-label">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="h-10 w-10 text-orange-800"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor" strokeWidth="2">
+                                                                            <path strokeLinecap="round"
+                                                                                strokeLinejoin="round"
+                                                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                                        </svg>
+
+                                                                        <h2
+                                                                            class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                                            Bukti Transfer</h2>
+
+                                                                        <p class="mt-2 text-gray-500 tracking-wide">Unggah
+                                                                            file Anda
+                                                                            <b>berkas PNG, JPG, JPEG</b>
+                                                                        </p>
+
+                                                                        <input id="dropzone-file" type="file"
+                                                                            class="hidden" name="image"
+                                                                            onchange="previews(this)"
+                                                                            accept="image/png, image/jpeg, image/jpg" />
+
+                                                                    </div>
+                                                                    <img id="preview" class="w-full rounded-md">
+                                                                </label>
+                                                                <x-input-error class="mt-2" :messages="$errors->get('image')" />
+
+                                                                <div class="w-full flex justify-between gap-2 mt-2">
+                                                                    <x-primary-button class="w-full"
+                                                                        type="submit">Kirim</x-primary-button>
+                                                                    <x-secondary-button type="button"
+                                                                        x-on:click="form = false">
+                                                                        <svg viewBox="0 0 24 24" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5">
+                                                                            <g id="SVGRepo_bgCarrier" stroke-width="0">
+                                                                            </g>
+                                                                            <g id="SVGRepo_tracerCarrier"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></g>
+                                                                            <g id="SVGRepo_iconCarrier">
+                                                                                <path
+                                                                                    d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                                                                    stroke="#1C274C" stroke-width="2"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round"></path>
+                                                                            </g>
+                                                                        </svg></x-secondary-button>
+                                                                </div>
+                                                            </div>
+                                                            <div x-show="!form">
+                                                                <x-secondary-button class="button"
+                                                                    x-on:click="form = true">
+                                                                    kembali
+                                                                </x-secondary-button>
+                                                                <div>
+                                                                    <x-input-label class="w-full"
+                                                                        for="pesan">Pesan</x-input-label>
+                                                                    <textarea name="pesan" id="pesan"
+                                                                        class="w-full p-2 border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm "
+                                                                        placeholder="ketik pesan untuk donasi ini"></textarea>
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('pesan')" />
+                                                                    <div>
+                                                                        <x-primary-button type="button"
+                                                                            x-on:click="form = true" class="w-full">
+                                                                            Lanjut
+                                                                        </x-primary-button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                                {{-- <div class="relative" x-show="payment === 'success'">
+                                                    <div class="flex justify-center">
+                                                        <div class="rounded-full bg-green-200 p-6">
+                                                            <div
+                                                                class="flex h-16 w-16 items-center justify-center rounded-full bg-green-500 p-4">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke-width="1.5"
+                                                                    stroke="currentColor" class="h-8 w-8 text-white">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M4.5 12.75l6 6 9-13.5" />
+                                                                </svg>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                    <h3 class="my-4 text-center text-3xl font-semibold text-gray-700">
+                                                        Terimakasih!!!</h3>
+                                                    <p class=" text-center font-normal text-gray-600">
+                                                        Donasimu sedang kami proses</p>
+                                                    <button x-on:click="payment = null"
+                                                        class="mx-auto mt-10 block rounded-xl border-4 border-transparent bg-orange-400 px-6 py-3 text-center text-base font-medium text-orange-100 outline-8 hover:outline hover:duration-300">Tutup</button>
+                                                </div> --}}
                                             </div>
+
                                         </div>
                                     </div>
+                                @else
+                                    <x-primary-button class="w-full py-4 bg-red-500" disabled>Donasi
+                                        Ditutup</x-primary-button>
+                                @endif
+                            @else
+                                <a href="{{ route('login') }}"
+                                    class="inline-flex w-full py-4 justify-center items-center bg-orange-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-orange-700 focus:bg-orange-700 active:bg-orange-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                                    disabled>Login Untuk Donasi</a>
+                            @endauth
 
-                                </div>
-                            </div>
                         </div>
                         <p class="text-sm text-slate-700">Bagikan kepada yang lainnya</p>
                         <x-secondary-button class="w-full py-4 gap-1" @click="share = ! share">

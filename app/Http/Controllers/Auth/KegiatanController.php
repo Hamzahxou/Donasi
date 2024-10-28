@@ -43,9 +43,11 @@ class KegiatanController extends Controller
             "deskripsi" => 'required',
             "content" => 'required',
             "target_dana" => 'required',
-            "tanggal_akhir" => 'required|date',
+            "tanggal_akhir" => 'required|date|after:today',
             "kategori" => 'required|exists:categories,id',
             "gambar" => 'required|mimes:png,jpg,jpeg',
+        ], [
+            'tanggal_akhir.after' => 'Tanggal akhir harus berisi tanggal setelah hari ini.',
         ]);
         $image = $request->file('gambar')->store('gambar', 'public');
         $project = Project::create([
@@ -55,7 +57,7 @@ class KegiatanController extends Controller
             'content' => $request->content,
             'target_amount' => $request->target_dana,
             'target_date' => $request->tanggal_akhir,
-            'is_active' => true,
+            'is_active' => $request->tanggal_akhir >= date('Y-m-d') ? true : false,
             'user_id' => Auth::user()->id,
             'category_id' => $request->kategori,
         ]);
@@ -76,7 +78,7 @@ class KegiatanController extends Controller
      */
     public function edit(string $id)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::findOrFail($id)->load('projectUpdates');
         if ($project->user_id != Auth::user()->id) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
         }
@@ -89,7 +91,37 @@ class KegiatanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        if ($project->user_id != Auth::user()->id) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
+        }
+        $request->validate([
+            "title" => 'required|max:255',
+            "deskripsi" => 'required',
+            "content" => 'required',
+            "target_dana" => 'required',
+            "tanggal_akhir" => 'required|date',
+            "kategori" => 'required|exists:categories,id',
+        ]);
+        if ($request->hasFile('gambar')) {
+            $request->validate(['gambar' => 'required|mimes:png,jpg,jpeg']);
+            if (file_exists(public_path('storage/' . $project->image))) {
+                unlink(public_path('storage/' . $project->image));
+            }
+            $image = $request->file('gambar')->store('gambar', 'public');
+        }
+        $project = $project->update([
+            'image' => $image ?? $project->image,
+            'title' => $request->title,
+            'description' => $request->deskripsi,
+            'content' => $request->content,
+            'target_amount' => $request->target_dana,
+            'target_date' => $request->tanggal_akhir,
+            'is_active' => $request->tanggal_akhir >= date('Y-m-d') ? true : false,
+            'category_id' => $request->kategori,
+        ]);
+
+        return redirect()->route('kegiatan.index')->with('success', 'kegiatan / project berhasil dibuat');
     }
 
     /**

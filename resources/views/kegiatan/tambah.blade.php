@@ -113,10 +113,10 @@
                                             <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
                                                 Gambar Kegiatan / Peoject</h2>
 
-                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah atau seret &
-                                                lepas
+                                            <p class="mt-2 text-gray-500 tracking-wide">Unggah
                                                 file Anda
-                                                berkas PNG, JPG, JPEG</p>
+                                                <b>berkas PNG, JPG, JPEG</b>
+                                            </p>
 
                                             <input id="dropzone-file" type="file" class="hidden" name="gambar"
                                                 onchange="ImgPreview(this)" accept="image/png, image/jpeg, image/jpg" />

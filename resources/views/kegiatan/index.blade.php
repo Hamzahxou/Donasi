@@ -69,10 +69,10 @@
                                         <div class="block lg:hidden text-sm text-gray-500">
                                             @if ($project->is_active)
                                                 <span
-                                                    class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-400">Aktif</span>
+                                                    class="inline-block bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-400">Aktif</span>
                                             @else
                                                 <span
-                                                    class="bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
+                                                    class="inline-block bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
                                                     aktif</span>
                                             @endif |
                                             {{ \Carbon\Carbon::parse($project->target_date)->isoFormat('dddd, D MMMM YYYY') }}
@@ -85,10 +85,10 @@
 
                                         @if ($project->is_active)
                                             <span
-                                                class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-400">Aktif</span>
+                                                class="inline-block text-nowrap bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-400">Aktif</span>
                                         @else
                                             <span
-                                                class="bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
+                                                class="inline-block text-nowrap bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
                                                 aktif</span>
                                         @endif
                                     </td>
@@ -118,7 +118,8 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <a href='' class="block text-blue-600 hover:text-blue-400">
+                                            <a href='{{ route('donation.show', $project->id) }}'
+                                                class="block text-blue-600 hover:text-blue-400">
                                                 <div class="w-5 h-5">
                                                     <svg viewBox="0 0 24 24" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -178,7 +179,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <th colspan="6" class="border px-6 py-4">Tidak ada resep</th>
+                                    <th colspan="6" class="border px-6 py-4">Tidak ada Kegiatan / Project</th>
                                 </tr>
                             @endforelse
                         </tbody>

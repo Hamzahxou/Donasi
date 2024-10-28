@@ -6,13 +6,14 @@ use App\Http\Controllers\Auth\KegiatanController;
 use App\Http\Controllers\Beranda\BerandaController;
 use App\Http\Controllers\Beranda\CategoryController as BerandaCategoryController;
 use App\Http\Controllers\Beranda\DonationController;
+use App\Http\Controllers\CronJob\ProjectActive;
 use App\Http\Controllers\Midtrans\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\MidtransConfig;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('sinkronisasi', ProjectActive::class)->name('sinkronisasi');
 
 Route::get('/', [BerandaController::class, 'beranda'])->name('beranda');
 Route::resource('donation', DonationController::class)->only(['index', 'show']);

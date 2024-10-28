@@ -29,7 +29,6 @@ class DonationController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $project = Project::findOrFail($request->project_id);
         $request->validate([
             'project_id' => 'required',
@@ -42,7 +41,7 @@ class DonationController extends Controller
             'bank_account_name' => $request->namaAkun,
             'amount' => $request->nominal,
             'image' => $image,
-            'message' => $request->message,
+            'message' => $request->pesan,
             'user_id' => Auth::user()->id,
             'project_id' => $project->id,
         ]);

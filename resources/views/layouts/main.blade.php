@@ -15,6 +15,8 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script src="{{ asset('storage/assets/js/sweetalert2@11.js') }}"></script>
     <style>
         button[data-toggle-navbar][data-is-open="true"] #line-1 {
             transform: translateY(0.375rem) rotate(40deg);
@@ -367,6 +369,25 @@
             })
         }
     </script>
+    @if (session('success'))
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "{{ session('success') }}"
+            });
+        </script>
+    @endif
 </body>
 
 </html>
