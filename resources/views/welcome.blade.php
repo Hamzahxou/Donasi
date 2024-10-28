@@ -81,7 +81,7 @@
                                             <div class="mb-3">
                                                 <h5
                                                     class="block font-sans text-xl antialiased font-medium leading-snug tracking-normal text-blue-gray-900">
-                                                    {{ $project->title }}
+                                                    {{ Str::limit($project->title, 20, '...') }}
                                                 </h5>
                                             </div>
                                             <p
