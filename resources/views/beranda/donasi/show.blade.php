@@ -340,7 +340,8 @@
                                                                         <input id="dropzone-file" type="file"
                                                                             class="hidden" name="image"
                                                                             onchange="previews(this)"
-                                                                            accept="image/png, image/jpeg, image/jpg" />
+                                                                            accept="image/png, image/jpeg, image/jpg"
+                                                                            required />
 
                                                                     </div>
                                                                     <img id="preview" class="w-full rounded-md">

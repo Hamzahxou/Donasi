@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -13,8 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.category.index', compact('categories'));
+        $categories = Category::where('user_id', Auth::user()->id)->get();
+        return view('category.index', compact('categories'));
     }
 
     /**
@@ -34,7 +35,7 @@ class CategoryController extends Controller
             'category' => 'required|max:255|unique:categories,name',
         ]);
 
-        Category::create(['name' => $request->category]);
+        Category::create(['name' => $request->category, 'user_id' => Auth::user()->id]);
         return redirect()->route('category.index')->with('success', 'Category Berhasil ditambahkan');
     }
 
@@ -59,7 +60,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'category' => 'required|max:255|unique:categories,name,' . $id,
+        ]);
+
+        $category = Category::findorFail($id);
+        $category->update(['name' => $request->category]);
+        return redirect()->route('category.index')->with('success', 'Category Berhasil diupdate');
     }
 
     /**
@@ -67,7 +74,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::findOrFail($id)->load('projects');
         if ($category->projects->count() > 0) {
             return redirect()->route('category.index')->with('error', 'Upps, Category tidak dapat dihapus');
         }

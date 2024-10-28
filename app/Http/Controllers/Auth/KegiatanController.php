@@ -29,7 +29,7 @@ class KegiatanController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('user_id', Auth::user()->id)->get();
         return view('kegiatan.tambah', compact('categories'));
     }
 
@@ -42,7 +42,7 @@ class KegiatanController extends Controller
             "title" => 'required|max:255',
             "deskripsi" => 'required',
             "content" => 'required',
-            "target_dana" => 'required',
+            "target_dana" => 'required|max:9999999999999.99',
             "tanggal_akhir" => 'required|date|after:today',
             "kategori" => 'required|exists:categories,id',
             "gambar" => 'required|mimes:png,jpg,jpeg',
@@ -82,7 +82,7 @@ class KegiatanController extends Controller
         if ($project->user_id != Auth::user()->id) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
         }
-        $categories = Category::all();
+        $categories = Category::where('user_id', Auth::user()->id)->get();
         return view('kegiatan.edit', compact('project', 'categories'));
     }
 
@@ -99,7 +99,7 @@ class KegiatanController extends Controller
             "title" => 'required|max:255',
             "deskripsi" => 'required',
             "content" => 'required',
-            "target_dana" => 'required',
+            "target_dana" => 'required|max:9999999999999.99',
             "tanggal_akhir" => 'required|date',
             "kategori" => 'required|exists:categories,id',
         ]);

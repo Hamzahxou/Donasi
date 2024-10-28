@@ -37,10 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('kegiatan', KegiatanController::class);
 
     Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
-
+    Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
     Route::prefix('admin')->middleware(Admin::class)->group(function () {
-        Route::resource('category', CategoryController::class);
         Route::resource('pembayaran', PembayaranController::class);
     });
 });

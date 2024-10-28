@@ -53,13 +53,14 @@
                 </span>
             </div>
 
-
             <div x-data="{ openTab: 0 }" class="p-8 w-svw">
                 <div class="flex justify-center items-center gap-2 w-full mb-4">
                     @foreach ($categories as $index => $category)
-                        <button x-on:click="openTab = {{ $index }}"
-                            :class="{ 'bg-orange-300 text-white': openTab === {{ $index }} }"
-                            class=" py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-orange transition-all duration-300">{{ $category->name }}</button>
+                        @if ($category->projects->count() > 0)
+                            <button x-on:click="openTab = {{ $index }}"
+                                :class="{ 'bg-orange-300 text-white': openTab === {{ $index }} }"
+                                class=" py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-orange transition-all duration-300">{{ $category->name }}</button>
+                        @endif
                     @endforeach
                 </div>
                 @foreach ($categories as $index => $category)

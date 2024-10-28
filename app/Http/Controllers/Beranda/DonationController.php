@@ -32,7 +32,7 @@ class DonationController extends Controller
         $project = Project::findOrFail($request->project_id);
         $request->validate([
             'project_id' => 'required',
-            'nominal' => 'required|numeric|max:9999999999999.99',
+            'nominal' => 'required|max:9999999999999.99',
             'namaAkun' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg',
         ]);

@@ -137,7 +137,7 @@
                                         </div>
                                         <div x-show="approve[{{ $i }}]"
                                             class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
-                                            <div
+                                            <div x-data="{ image_{{ $i }}: false }"
                                                 class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden ">
                                                 <button x-on:click="approve[{{ $i }}] = false"
                                                     class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
@@ -152,20 +152,52 @@
                                                     method="post">
                                                     @csrf
                                                     @method('PUT')
+
+                                                    <div class="w-full" x-show="image_{{ $i }}">
+                                                        <x-secondary-button
+                                                            x-on:click="image_{{ $i }} = false"
+                                                            class="mb-2">kembali</x-secondary-button>
+                                                    </div>
+
+                                                    <x-primary-button type="button"
+                                                        x-on:click="image_{{ $i }} = true"
+                                                        x-show="!image_{{ $i }}">Bukti
+                                                        Transfer</x-primary-button>
+                                                    <div class="my-2">
+                                                        <table class="text-gray-500 text-md">
+                                                            <tr>
+                                                                <td>Nama</td>
+                                                                <th>:</th>
+                                                                <td><b>{{ $donation->bank_account_name }}</b></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Nominal</td>
+                                                                <th>:</th>
+                                                                <td>Rp.
+                                                                    <b>{{ number_format($donation->amount, 0, ',', '.') }}</b>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Tanggal</td>
+                                                                <th>:</th>
+                                                                <td>{{ \Carbon\Carbon::parse($donation->created_at)->isoFormat('dddd, D MMMM YYYY') }}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="w-full" x-show="image_{{ $i }}">
+                                                        <img src="{{ asset('storage/' . $donation->image) }}"
+                                                            class="w-full" alt="">
+                                                    </div>
                                                     <input type="hidden" name="project_id"
                                                         value="{{ $donation->project_id }}">
-                                                    <div class="my-2">
+                                                    <div x-show="!image_{{ $i }}" class="my-2">
                                                         <x-input-label class="w-full"
                                                             for="konfirmasi_{{ $i }}">Konfirmasi</x-input-label>
                                                         <select name="konfirmasi"
                                                             class="border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm w-full"
                                                             id="konfirmasi_{{ $i }}"
                                                             onchange="ConfirmasiVerifed(this.value, '{{ $i }}')">
-                                                            {{-- @if ($donation->is_verified)
-                                                            <option value="0">Tolak</option>
-                                                        @else
-                                                            <option value="1">Terima</option>
-                                                        @endif --}}
                                                             <option value="1"
                                                                 {{ $donation->is_verified ? 'selected disabled' : '' }}>
                                                                 Ya</option>
@@ -174,11 +206,11 @@
                                                                 Tidak</option>
                                                         </select>
                                                         <x-input-error class="mt-2" :messages="$errors->get('konfirmasi')" />
+                                                        <x-primary-button type="submit" class="hidden my-2"
+                                                            id="save_{{ $i }}">
+                                                            Simpan
+                                                        </x-primary-button>
                                                     </div>
-                                                    <x-primary-button type="submit" class="hidden"
-                                                        id="save_{{ $i }}">
-                                                        Simpan
-                                                    </x-primary-button>
                                                 </form>
                                             </div>
                                         </div>

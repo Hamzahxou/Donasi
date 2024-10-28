@@ -8,6 +8,7 @@ class Category extends Model
 {
     protected $fillable = [
         'name',
+        'user_id'
     ];
     public $timestamps = false;
     public function projects()
