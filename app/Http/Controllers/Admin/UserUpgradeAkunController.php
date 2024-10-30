@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UpgradeAccount;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserUpgradeAkunController extends Controller
@@ -54,7 +55,25 @@ class UserUpgradeAkunController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $upgrade = UpgradeAccount::findOrFail($id);
+        $request->validate([
+            'konfirmasi' => 'required|in:1,0',
+        ]);
+        $upgrade->update([
+            'is_approved' => $request->konfirmasi,
+        ]);
+        $user = User::findOrFail($upgrade->user_id);
+        if ($request->konfirmasi == 1) {
+            $user->update([
+                'role' => 'project_owner'
+            ]);
+            return redirect()->route('upgrade-akun.index')->with('success', 'upgrade account berhasil disetujui');
+        } else {
+            $user->update([
+                'role' => 'donor'
+            ]);
+            return redirect()->route('upgrade-akun.index')->with('error', 'upgrade account tidak disetujui');
+        }
     }
 
     /**

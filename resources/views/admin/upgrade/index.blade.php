@@ -192,7 +192,6 @@
                                                                 alt="bukti dokument" />
                                                         @endif
                                                     </div>
-                                                    <input type="hidden" name="project_id" value="{">
                                                     <div x-show="!image_{{ $i }}" class="my-2">
                                                         <x-input-label class="w-full"
                                                             for="konfirmasi_{{ $i }}">Konfirmasi</x-input-label>
@@ -220,7 +219,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <th colspan="6" class="border px-6 py-4">Tidak ada pembayaran</th>
+                                    <th colspan="6" class="border px-6 py-4">Tidak ada data</th>
                                 </tr>
                             @endforelse
                         </tbody>

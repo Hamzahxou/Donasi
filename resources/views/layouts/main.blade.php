@@ -87,10 +87,17 @@
 
                     <div class="flex gap-1 justify-center items-center">
                         @auth
-                            <a href="{{ route('dashboard') }}"
-                                class="text-white bg-orange-500 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 w-full sm:w-auto">
-                                Dashboard
-                            </a>
+                            @if (auth()->user()->role == 'admin')
+                                <a href="{{ route('admin.dashboard') }}"
+                                    class="text-white bg-orange-500 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 w-full sm:w-auto">
+                                    Dashboard
+                                </a>
+                            @else
+                                <a href="{{ route('dashboard') }}"
+                                    class="text-white bg-orange-500 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 w-full sm:w-auto">
+                                    Dashboard
+                                </a>
+                            @endif
                         @else
                             <a href="{{ route('login') }}"
                                 class="text-white bg-orange-500 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground h-10 px-4 py-2 w-full sm:w-auto">
