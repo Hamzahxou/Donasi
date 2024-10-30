@@ -184,9 +184,11 @@
                                 {{ __('Tambah pembaruan') }}
                             </x-primary-button>
 
-                            <form x-show="tambah == true" method="post" action="" class="space-y-6"
+                            <form x-show="tambah == true" method="post"
+                                action="{{ route('kegiatan-terbaru.store') }}" class="space-y-6"
                                 enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="kegiatan_id" value="{{ $project->id }}">
                                 <div class="block lg:flex gap-2 w-full">
                                     <div class="lg:w-3/5">
                                         <div class="trix">
@@ -257,8 +259,9 @@
                                     </summary>
 
                                     <p class="text-neutral-600 mt-3 group-open:animate-fadeIn">
-                                    <form method="post" action="" class="space-y-6"
-                                        enctype="multipart/form-data" novalidate>
+                                    <form method="post"
+                                        action="{{ route('kegiatan-terbaru.update', $projectUpdates->id) }}"
+                                        class="space-y-6" enctype="multipart/form-data" novalidate>
                                         @csrf
                                         @method('PUT')
                                         <div class="block lg:flex gap-2 w-full">
@@ -266,7 +269,7 @@
                                                 <div class="trix">
                                                     <x-input-label for="x_{{ $i }}" :value="__('Konten')" />
                                                     <input id="x_{{ $i }}" type="hidden"
-                                                        value="{{ old('content', $project->content) }}"
+                                                        value="{{ old('content', $projectUpdates->update_content) }}"
                                                         name="content">
                                                     <trix-editor input="x_{{ $i }}"
                                                         class="border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm min-h-[350px]"></trix-editor>
@@ -306,21 +309,28 @@
 
                                                         </div>
                                                         <img id="preview"
-                                                            src="{{ asset('storage/' . $project->image) }}"
+                                                            src="{{ asset('storage/' . $projectUpdates->image) }}"
                                                             class="w-full rounded-md">
                                                     </label>
                                                     <x-input-error class="mt-2" :messages="$errors->get('gambar')" />
                                                 </div>
-                                                <div class="my-2 flex gap-3 flex-wrap">
-                                                    <x-primary-button type="submit">
-                                                        {{ __('Ubah') }}
-                                                    </x-primary-button>
-                                                    <x-danger-button>Hapus</x-danger-button>
-                                                </div>
+
+                                                <x-primary-button type="submit" class="my-2">
+                                                    {{ __('Ubah') }}
+                                                </x-primary-button>
                                             </div>
                                         </div>
 
                                     </form>
+                                    <div class="my-2 flex justify-end gap-3">
+                                        <form action="{{ route('kegiatan-terbaru.destroy', $projectUpdates->id) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <x-danger-button type="submit"
+                                                onclick="KonfirmasiHapus(event)">Hapus</x-danger-button>
+                                        </form>
+                                    </div>
                                     </p>
                                 </details>
                             </div>
@@ -358,6 +368,27 @@
                     e.parentElement.classList.remove('flex')
                     e.parentElement.parentElement.querySelector('img').src = URL.createObjectURL(file);
                 }
+            }
+        </script>
+
+        <script>
+            function KonfirmasiHapus(e) {
+                e.preventDefault()
+                const form = e.target.closest('form')
+                Swal.fire({
+                    title: "Kamu Yakin?",
+                    text: "Data ini akan dihapus?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "rgb(249 115 22)",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Hapus!",
+                    cancelButtonText: "Batal"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit()
+                    }
+                })
             }
         </script>
     @endpush

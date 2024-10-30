@@ -78,7 +78,9 @@ class KegiatanController extends Controller
      */
     public function edit(string $id)
     {
-        $project = Project::findOrFail($id)->load('projectUpdates');
+        $project = Project::findOrFail($id)->load(['projectUpdates' => function ($query) {
+            $query->orderBy('id', 'desc');
+        }]);
         if ($project->user_id != Auth::user()->id) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
         }

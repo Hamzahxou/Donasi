@@ -147,12 +147,261 @@
                         </div>
                         <div x-show="openTab === 2" class="transition-all duration-300">
                             <div class="">
-                                <p>sip bro</p>
+                                @forelse ($project->projectUpdates as $projectUpdates)
+                                    <div class="mb-4 border-b-2 border-dashed p-2">
+                                        <p class="text-gray-700 text-md">
+                                            {{ \Carbon\Carbon::parse($projectUpdates->created_at)->isoFormat('dddd, D MMMM YYYY') }}
+                                        </p>
+                                        <div class="flex flex-wrap gap-3">
+                                            <img src="{{ asset('storage/' . $projectUpdates->image) }}"
+                                                class="w-full md:w-96 float-left rounded-md" alt="">
+                                            {!! $projectUpdates->update_content !!}
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-center text-md text-gray-500">Belum ada kegiatan terbaru</p>
+                                @endforelse
                             </div>
                         </div>
                         <div x-show="openTab === 3" class="transition-all duration-300">
                             <div class="">
-                                <p>sip bro aman</p>
+
+                                <section class=" py-8 lg:py-16 antialiased">
+                                    <div class="max-w-2xl mx-auto px-4">
+                                        <div class="flex justify-between items-center mb-6">
+                                            <h2 class="text-lg lg:text-2xl font-bold text-gray-900">Komentar
+                                            </h2>
+                                        </div>
+                                        @auth
+                                            <form class="mb-6" action="{{ route('comment.store') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                <div
+                                                    class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 ">
+                                                    <label for="comment" class="sr-only">Komentar</label>
+                                                    <textarea id="comment" rows="6"
+                                                        class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none  " placeholder="Komentar..."
+                                                        required name="comment"></textarea>
+                                                </div>
+                                                <div class="flex justify-end">
+                                                    <x-secondary-button
+                                                        type="submit">{{ __('Kirim') }}</x-secondary-button>
+                                                </div>
+                                            </form>
+                                        @else
+                                            <div
+                                                class="mb-6 border border-dashed border-slate-600 bg-gray-100 w-full h-32 rounded-md flex justify-center items-center flex-col gap-2">
+                                                <p class="text-slate-600">Login untuk memulai komentar</p>
+                                                <a href="{{ route('login') }}"
+                                                    class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">Login</a>
+                                            </div>
+                                        @endauth
+                                        @forelse ($project->comments as $comment)
+                                            <article class="p-6 text-base bg-white rounded-lg mb-4">
+                                                <div class="flex justify-between items-center mb-1">
+                                                    <div class="flex items-center">
+                                                        <p
+                                                            class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                                                            @if ($comment->user->avatar)
+                                                                <img class="mr-2 w-6 h-6 rounded-full"
+                                                                    src="{{ asset('storage/' . $comment->user->avatar) }}"
+                                                                    alt=" {{ $comment->user->name }}">
+                                                            @else
+                                                                <img class="mr-2 w-6 h-6 rounded-full"
+                                                                    src="{{ asset('https://api.dicebear.com/9.x/bottts-neutral/svg?seed=' . $comment->user->name) }}"
+                                                                    alt=" {{ $comment->user->name }}">
+                                                            @endif
+                                                            {{ explode(' ', $comment->user->name)[1] }}
+                                                            @if ($comment->user->id == $project->user->id)
+                                                                <span
+                                                                    class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium me-2 px-3 py-1 rounded">Pemilik</span>
+                                                            @endif
+
+                                                        </p>
+                                                        <p class="text-sm text-gray-600 "><time pubdate
+                                                                datetime="2022-02-08"
+                                                                title="February 8th, 2022">{{ $comment->created_at->isoFormat('dddd, D MMM YYYY') }}</time>
+                                                        </p>
+                                                    </div>
+                                                    @if (auth()->user() && $comment->user->id == auth()->user()->id)
+                                                        <div x-data="{ dropdownOpen: false }" class="relative">
+                                                            <button @click="dropdownOpen = !dropdownOpen"
+                                                                class="relative z-10 block items-center p-2 text-sm font-medium text-center text-gray-900  bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 ">
+                                                                <svg class="h-6 w-6 text-dark"
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                                                </svg>
+                                                            </button>
+
+                                                            <div x-show="dropdownOpen" @click="dropdownOpen = false"
+                                                                class="fixed inset-0 h-full w-full z-10"></div>
+
+                                                            <div x-show="dropdownOpen"
+                                                                class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-20">
+                                                                <form
+                                                                    action="{{ route('comment.update', $comment->id) }}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="hidden" name="content"
+                                                                        value="{{ $comment->comment }}">
+                                                                    <button type="submit" onclick="editComment()"
+                                                                        class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Edit</button>
+                                                                </form>
+                                                                <form
+                                                                    action="{{ route('comment.destroy', $comment->id) }}"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        onclick="hapusCommenConfim()"
+                                                                        class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Hapus</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <p class="text-gray-500 ">{{ $comment->comment }}</p>
+                                                @auth
+                                                    <div class="flex items-center mt-4 space-x-4">
+                                                        <button type="button"
+                                                            onclick="reply(this.parentElement.parentElement, '{{ $comment->id }}', '{{ route('comment-reply.store') }}')"
+                                                            class="flex items-center text-sm text-gray-500 hover:underline font-medium">
+                                                            <svg class="mr-1.5 w-3.5 h-3.5" aria-hidden="true"
+                                                                xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 20 18">
+                                                                <path stroke="currentColor" stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+                                                            </svg>
+                                                            Balas
+                                                        </button>
+                                                    </div>
+                                                @endauth
+                                            </article>
+                                            @foreach ($comment->commentReplies as $reply)
+                                                <article
+                                                    class="p-6 text-base bg-white rounded-lg mb-4 mb-3 ml-6 lg:ml-12 relative"
+                                                    data-idReply="{{ $reply->id }}">
+                                                    <div class="flex justify-between items-center mb-1">
+                                                        <div class="flex items-center">
+                                                            <p
+                                                                class="inline-flex items-center mr-3 text-sm text-gray-900 font-semibold">
+                                                                @if ($reply->user->avatar)
+                                                                    <img class="mr-2 w-6 h-6 rounded-full"
+                                                                        src="{{ asset('storage/' . $reply->user->avatar) }}"
+                                                                        alt="{{ $reply->user->name }}">
+                                                                @else
+                                                                    <img class="mr-2 w-6 h-6 rounded-full"
+                                                                        src="{{ asset('https://api.dicebear.com/9.x/bottts-neutral/svg?seed=' . $reply->user->name) }}"
+                                                                        alt="{{ $reply->user->name }}">
+                                                                @endif
+                                                                {{ explode(' ', $reply->user->name)[1] }}
+                                                                @if ($reply->user->id == $project->user->id)
+                                                                    <span
+                                                                        class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium px-3 py-1 rounded">Pemilik</span>
+                                                                @endif
+                                                                @if ($reply->parent_reply_id)
+                                                                    <div class="flex items-center cursor-pointer me-2"
+                                                                        onclick="showReply({{ $reply->parent_reply_id }})">
+                                                                        <div class="w-5 h-5">
+                                                                            <svg viewBox="0 0 24 24" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <g id="SVGRepo_bgCarrier"
+                                                                                    stroke-width="0"></g>
+                                                                                <g id="SVGRepo_tracerCarrier"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round">
+                                                                                </g>
+                                                                                <g id="SVGRepo_iconCarrier">
+                                                                                    <path
+                                                                                        d="M19.5 12L14.5 7M19.5 12L14.5 17M19.5 12L9.5 12C7.83333 12 4.5 13 4.5 17"
+                                                                                        stroke="#1C274C"
+                                                                                        stroke-width="1.5"
+                                                                                        stroke-linecap="round"
+                                                                                        stroke-linejoin="round"></path>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </div>
+                                                                        {{ explode(' ', $reply->parentReply->user->name)[1] }}
+                                                                    </div>
+                                                                @endif
+                                                            </p>
+                                                            <p class="text-sm text-gray-600 "><time pubdate
+                                                                    datetime="2022-02-08"
+                                                                    title="February 8th, 2022">{{ $reply->created_at->isoFormat('dddd, D MMM YYYY') }}</time>
+                                                            </p>
+                                                        </div>
+                                                        @if (auth()->user() && $reply->user->id == auth()->user()->id)
+                                                            <div x-data="{ dropdownOpen: false }" class="relative">
+                                                                <button @click="dropdownOpen = !dropdownOpen"
+                                                                    class="relative z-10 block items-center p-2 text-sm font-medium text-center text-gray-900  bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 ">
+                                                                    <svg class="h-6 w-6 text-dark"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                <div x-show="dropdownOpen"
+                                                                    @click="dropdownOpen = false"
+                                                                    class="fixed inset-0 h-full w-full z-10"></div>
+
+                                                                <div x-show="dropdownOpen"
+                                                                    class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-20">
+                                                                    <form
+                                                                        action="{{ route('comment-reply.update', $reply->id) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <input type="hidden" name="content"
+                                                                            value="{{ $reply->comment }}">
+                                                                        <button type="submit" onclick="editComment()"
+                                                                            class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Edit</button>
+                                                                    </form>
+                                                                    <form
+                                                                        action="{{ route('comment-reply.destroy', $reply->id) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit"
+                                                                            onclick="hapusCommenConfim()"
+                                                                            class="block w-full text-start px-4 py-2 text-sm text-gray-800 border-b hover:bg-gray-200">Hapus</button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <p class="text-gray-500 ">{{ $reply->comment }}</p>
+                                                    @auth
+                                                        <div class="flex items-center mt-4 space-x-4">
+                                                            <button type="button"
+                                                                onclick="reply(this.parentElement.parentElement, '{{ $comment->id }}', '{{ route('comment-reply.store') }}', {{ $reply->id }})"
+                                                                class="flex items-center text-sm text-gray-500 hover:underline font-medium">
+                                                                <svg class="mr-1.5 w-3.5 h-3.5" aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 20 18">
+                                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+                                                                </svg>
+                                                                Balas
+                                                            </button>
+                                                        </div>
+                                                    @endauth
+                                                </article>
+                                            @endforeach
+                                        @empty
+                                            <p class="text-center text-md text-gray-500">Belum ada komentar</p>
+                                        @endforelse
+                                    </div>
+                                </section>
                             </div>
                         </div>
                     </div>
@@ -172,8 +421,9 @@
                                             class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden ">
                                             <button x-on:click="donasi = false"
                                                 class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                    class="h-6 w-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
@@ -471,6 +721,21 @@
                                     </svg></div>
                             </a>
                         </div>
+                        <div class="my-2 bg-white w-full rounded-md text-gray-500 overflow-hidden">
+                            <div class="bg-gray-100 py-2 px-4 border-b-2 ">
+                                <h2 class="text-md font-semibold text-gray-800 ">Penggalang Dana</h2>
+                            </div>
+                            <div class="p-3 flex gap-2">
+                                @if ($project->user->avatar)
+                                    <img src="{{ asset('storage/' . $project->user->avatar) }}"
+                                        alt="{{ $project->user->name }}" class="w-7 h-7 rounded-full object-cover">
+                                @else
+                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $project->user->name }}"
+                                        alt="{{ $project->user->name }}" class="w-7 h-7 rounded-full object-cover">
+                                @endif
+                                {{ $project->user->name }}
+                            </div>
+                        </div>
                         <div class="bg-white w-full rounded-md overflow-x-hidden overflow-y-auto">
                             <div class="bg-gray-100 py-2 px-4 ">
                                 <h2 class="text-lg font-semibold text-gray-800 ">Para donatur</h2>
@@ -490,7 +755,7 @@
                                                     alt="{{ $donation->user->name }}"
                                                     class="w-7 h-7 rounded-full object-cover mr-4">
                                             @else
-                                                <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $donation->user->username }}"
+                                                <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $donation->user->name }}"
                                                     alt="{{ $donation->user->name }}"
                                                     class="w-7 h-7 rounded-full object-cover mr-4">
                                             @endif
@@ -577,6 +842,102 @@
 
 
             copyButton.addEventListener("click", (e) => copyText(e));
+        </script>
+
+        <script>
+            function hapusCommenConfim() {
+                event.preventDefault();
+                let form = event.target.form;
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Ini akan menghapus komentar ini",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#333',
+                    cancelButtonColor: '#c3c3c3',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+
+
+            async function editComment() {
+                event.preventDefault();
+                let form = event.target.form;
+                let comment = form.querySelector("input[name='content']").value;
+                const {
+                    value: text
+                } = await Swal.fire({
+                    input: "textarea",
+                    inputLabel: "Ubah Komentar",
+                    inputValue: comment,
+                    inputPlaceholder: "Type your message here...",
+                    inputAttributes: {
+                        "aria-label": "Type your message here"
+                    },
+                    showCancelButton: true,
+                    cancelButtonText: "Batal",
+                    confirmButtonText: "Simpan",
+                    cancelButtonColor: "#c3c3c3",
+                    confirmButtonColor: "#333",
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return "Tidak boleh kosong!";
+                        }
+                    }
+                });
+                if (text) {
+                    form.querySelector("input[name='content']").value = text;
+                    form.submit();
+                }
+            }
+
+            function templateForm(route, id, reply) {
+                return `
+        <article id="reply">
+            <form class="mb-6" action="${route}" method="post">
+                @csrf
+                <input type="hidden" name="comment_id" value="${id}"/>
+                <input type="hidden" name="reply" value="${reply}"/>
+                <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 ">
+                  <label for="comment" class="sr-only">Komentar</label>
+                  <textarea id="comment" rows="6" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none  " placeholder="Balas Komentar..." required name="comment"></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <x-secondary-button onclick="(this.parentElement.parentElement.parentElement.remove())">Batal</x-secondary-button>
+                    <x-primary-button type="submit">{{ __('Kirim') }}</x-primary-button>
+                </div>
+            </form>
+        </article>
+        `
+            }
+
+            function reply(el, id, route, reply = '') {
+                if (document.getElementById("reply")) {
+                    document.getElementById("reply").remove();
+                }
+                el.insertAdjacentHTML("afterend", templateForm(route, id, reply));
+            }
+
+            const templateReplyShow =
+                `<div class="w-2 bg-slate-500 absolute top-0 bottom-0 -left-5 animate-pulse" id="replyShow"></div>`
+            const data_idReply = document.querySelectorAll('[data-idReply]');
+
+            function showReply(id) {
+                const replyShow = document.getElementById("replyShow");
+                if (replyShow) {
+                    replyShow.remove();
+                }
+                data_idReply.forEach(el => {
+                    if (el.getAttribute('data-idReply') == id) {
+                        el.insertAdjacentHTML("afterbegin", templateReplyShow);
+                    }
+                });
+            }
         </script>
     @endpush
 </x-main>

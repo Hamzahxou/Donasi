@@ -158,11 +158,14 @@
                                                             x-on:click="image_{{ $i }} = false"
                                                             class="mb-2">kembali</x-secondary-button>
                                                     </div>
-
                                                     <x-primary-button type="button"
                                                         x-on:click="image_{{ $i }} = true"
                                                         x-show="!image_{{ $i }}">Bukti
                                                         Transfer</x-primary-button>
+                                                    <x-secondary-button type="button"
+                                                        x-on:click="image_{{ $i }} = null"
+                                                        x-show="!image_{{ $i }}">Informasi
+                                                        Donasi</x-secondary-button>
                                                     <div class="my-2">
                                                         <table class="text-gray-500 text-md">
                                                             <tr>
@@ -188,6 +191,36 @@
                                                     <div class="w-full" x-show="image_{{ $i }}">
                                                         <img src="{{ asset('storage/' . $donation->image) }}"
                                                             class="w-full" alt="">
+                                                    </div>
+                                                    <div class="w-full border-dashed border-2 border-gray-400 p-2"
+                                                        x-show="image_{{ $i }} === null">
+                                                        <table class="text-gray-500 text-md">
+                                                            <tr>
+                                                                <td>Nama Kegiatan</td>
+                                                                <th>:</th>
+                                                                <td><b>{{ $donation->project->title }}</b></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Target Dana</td>
+                                                                <th>:</th>
+                                                                <td>Rp.
+                                                                    <b>{{ number_format($donation->project->target_amount, 0, ',', '.') }}</b>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Dana Terkumpul</td>
+                                                                <th>:</th>
+                                                                <td>Rp.
+                                                                    <b>{{ number_format($donation->project->collect_amount, 0, ',', '.') }}</b>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Batas Tanggal</td>
+                                                                <th>:</th>
+                                                                <td>{{ \Carbon\Carbon::parse($donation->project->target_date)->isoFormat('dddd, D MMMM YYYY') }}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
                                                     </div>
                                                     <input type="hidden" name="project_id"
                                                         value="{{ $donation->project_id }}">

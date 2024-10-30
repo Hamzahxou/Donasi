@@ -24,7 +24,7 @@
                         class="rounded-full w-24 h-24 mb-4 shadow-2xl">
                 @else
                     <img id="profile_preview"
-                        src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $user->username }}"
+                        src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ $user->name }}"
                         alt="{{ $user->name }}" class="rounded-full w-24 h-24 mb-4 shadow-2xl">
                 @endif
 

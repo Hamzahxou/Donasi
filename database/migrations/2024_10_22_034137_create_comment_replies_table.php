@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('comment_replies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_reply_id')->nullable()->constrained('comment_replies', 'id')->onDelete('cascade');
             $table->text('comment');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('comment_id')->constrained()->onDelete('cascade');

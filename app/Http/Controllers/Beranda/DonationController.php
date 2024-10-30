@@ -19,11 +19,21 @@ class DonationController extends Controller
     public function show(Request $request, string $id) //, Project $id
     {
 
-        $project = Project::findOrFail($id)->load(['donations' => function ($query) {
-            $query->where('is_verified', true)->with('user:id,name,avatar');
-        }], 'comments.commentReplies')->loadCount(['donations' => function ($query) {
+        $project = Project::findOrFail($id)->load([
+            'donations' => function ($query) {
+                $query->where('is_verified', true)->with('user:id,name,avatar');
+            },
+            'comments.user:id,name,avatar',
+            'comments.commentReplies.user:id,name,avatar',
+            'comments.commentReplies.parentReply.user:id,name,avatar',
+            'projectUpdates' => function ($query) {
+                $query->orderBy('id', 'desc');
+            },
+            'user:id,name,avatar'
+        ])->loadCount(['donations' => function ($query) {
             $query->where('is_verified', true);
         }]);
+        // dd($project->toArray());
         return view('beranda.donasi.show', compact('project'));
     }
 

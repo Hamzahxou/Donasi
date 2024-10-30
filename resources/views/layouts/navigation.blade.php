@@ -12,18 +12,41 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
-                        {{ __('Kagiatan / Project') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.*')">
-                        {{ __('Pembayaran') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
-                        {{ __('Categori') }}
-                    </x-nav-link>
+                    @if (auth()->user()->role == 'admin')
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                            {{ __('Kagiatan / Project') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.*')">
+                            {{ __('Pembayaran') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('upgrade-akun.index')" :active="request()->routeIs('upgrade-akun.*')">
+                            {{ __('User Upgrade Akun') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                            {{ __('Categori') }}
+                        </x-nav-link>
+                    @elseif (auth()->user()->role == 'project_owner')
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                            {{ __('Kagiatan / Project') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                            {{ __('Categori') }}
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('upgrade.index')" :active="request()->routeIs('upgrade.index')">
+                            {{ __('Upgrade Akun') }}
+                        </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 
@@ -38,7 +61,7 @@
                                     <img src="{{ asset('storage/' . Auth::user()->avatar) }}"
                                         alt="{{ Auth::user()->name }}" class="rounded-full w-8 h-8 mb-4 shadow-2xl">
                                 @else
-                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ Auth::user()->username }}"
+                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed={{ Auth::user()->name }}"
                                         alt="{{ Auth::user()->name }}" class="rounded-full w-8 h-8 mb-4 shadow-2xl">
                                 @endif
                             </div>
@@ -83,9 +106,40 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if (auth()->user()->role == 'admin')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                    {{ __('Kagiatan / Project') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pembayaran.index')" :active="request()->routeIs('pembayaran.*')">
+                    {{ __('Pembayaran') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('upgrade-akun.index')" :active="request()->routeIs('upgrade-akun.*')">
+                    {{ __('User Upgrade Akun') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                    {{ __('Categori') }}
+                </x-responsive-nav-link>
+            @elseif (auth()->user()->role == 'project_owner')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
+                    {{ __('Kagiatan / Project') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+                    {{ __('Categori') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('upgrade.index')" :active="request()->routeIs('upgrade.*')">
+                    {{ __('Upgrade Akun') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
