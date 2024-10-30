@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('bank_account_name');
             $table->string('bank_account_number');
-            $table->string('bank_branch_number');
+            $table->string('bank_branch');
             $table->string('phone');
             $table->text('upgrade_reason');
             $table->string('supporting_documents')->nullable();

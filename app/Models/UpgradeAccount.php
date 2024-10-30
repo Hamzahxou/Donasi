@@ -10,7 +10,7 @@ class UpgradeAccount extends Model
         'user_id',
         'bank_account_name',
         'bank_account_number',
-        'bank_branch_number',
+        'bank_branch',
         'phone',
         'upgrade_reason',
         'supporting_documents',

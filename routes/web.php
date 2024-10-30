@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PembayaranController;
 use App\Http\Controllers\Admin\UserUpgradeAkunController;
 use App\Http\Controllers\Auth\CommentController;
 use App\Http\Controllers\Auth\CommentReplyController;
+use App\Http\Controllers\Auth\DashboardController;
 use App\Http\Controllers\Auth\KegiatanController;
 use App\Http\Controllers\Auth\kegiatanTerbaruController;
 use App\Http\Controllers\Auth\UpgradeAkunController;
@@ -19,6 +20,7 @@ use App\Http\Middleware\Admin;
 use App\Http\Middleware\Donasi;
 use App\Http\Middleware\MidtransConfig;
 use App\Http\Middleware\Owner;
+use App\Http\Middleware\OwnerDonor;
 use Illuminate\Support\Facades\Route;
 
 Route::get('sinkronisasi', ProjectActive::class)->name('sinkronisasi');
@@ -33,7 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     // Route::prefix('midtrans')->middleware(MidtransConfig::class)->group(function () {
     //     Route::get('/pay', function () {
     //         return view('auth.midtrans');
@@ -41,20 +42,22 @@ Route::middleware('auth')->group(function () {
     //     Route::post('/get-snap-token', [PaymentController::class, 'getSnapToken']);
     // });
 
-    Route::get('/dashboard',  fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard',  DashboardController::class)->middleware(OwnerDonor::class)->name('dashboard');
     Route::resource('comment', CommentController::class)->only(['store', 'update', 'destroy']);
     Route::resource('comment-reply', CommentReplyController::class)->only(['store', 'update', 'destroy']);
 
     Route::middleware(Donasi::class)->group(function () {
         Route::resource('upgrade', UpgradeAkunController::class)->only(['index', 'store']);
     });
+
     Route::resource('kegiatan', KegiatanController::class);
     Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class);
 
     Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
     Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
-    Route::prefix('admin')->middleware(Admin::class)->group(function () {
+    Route::middleware(Admin::class)->group(function () {
+        Route::get('admin-dashboard', Dashboard::class)->name('admin.dashboard');
         Route::resource('pembayaran', PembayaranController::class);
         Route::resource('upgrade-akun', UserUpgradeAkunController::class);
     });

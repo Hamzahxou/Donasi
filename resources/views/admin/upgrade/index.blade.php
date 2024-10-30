@@ -1,7 +1,7 @@
 <x-app-layout title="Pembayaran">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Konfirmasi Donasi Pembayaran') }}
+            {{ __('Konfirmasi user upgrade') }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg overflow-x-auto">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form class="w-full">
+                    {{-- <form class="w-full">
                         <div class="flex gap-2 items-center">
                             <div class="relative w-full">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -33,46 +33,42 @@
                             </select>
                             <x-primary-button type="submit">cari</x-primary-button>
                         </div>
-                    </form>
+                    </form> --}}
 
                     <hr class="border-b-2 border-taupeGray mt-4 mb-4 block" />
                     <table class="w-full whitespace-no-wrapw-full whitespace-no-wrap table-auto">
                         <thead>
                             <tr class="text-center font-bold">
                                 <td class="border px-6 py-4 w-[80px]">No</td>
-                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Bukti TF</td>
+                                <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Dokumen</td>
                                 <td class="border px-6 py-4 lg:w-[250px]">Nama</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal</td>
-                                <td class="border px-6 py-4 lg:w-[150px] hidden lg:table-cell">Jumlah</td>
                                 <td class="border px-6 py-4  w-[100px]">Aksi</td>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($donations as $i => $donation)
+                            @forelse ($upgrade_accounts as $i => $upgrade)
                                 <tr x-data="{ approve: {} }">
                                     <td class="border px-6 py-4 text-center">
-                                        {{ $donations->firstItem() + $loop->index }}
+                                        {{ $loop->iteration }}
                                     </td>
                                     <td class="border px-6 py-4 hidden lg:table-cell">
                                         <div class="w-32 mx-auto">
-                                            <img src="{{ asset('storage/' . $donation->image) }}"
-                                                class="w-full h-full bg-center bg-cover md:w-32 max-w-full max-h-full"
-                                                alt="bukti transfer {{ $donation->user->name }}" />
+                                            @if (explode('.', $upgrade->supporting_documents)[1] == 'pdf')
+                                                <a href="{{ asset('storage/' . $upgrade->supporting_documents) }}"
+                                                    class="w-full h-full bg-center bg-cover md:w-32 max-w-full max-h-full">Dokument</a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $upgrade->supporting_documents) }}"
+                                                    class="w-full h-full bg-center bg-cover md:w-32 max-w-full max-h-full"
+                                                    alt="bukti dokument" />
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="border px-6 py-4">
-                                        {{ $donation->user->name }}
-                                        <div class="block lg:hidden text-sm text-gray-500">
-                                            Rp. {{ number_format($donation->amount, 0, ',', '.') }}
-                                            |
-                                            {{ \Carbon\Carbon::parse($donation->created_at)->isoFormat('dddd, D MMMM YYYY') }}
-                                        </div>
+                                        {{ $upgrade->user->name }}
                                     </td>
                                     <td class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
-                                        {{ \Carbon\Carbon::parse($donation->created_at)->isoFormat('dddd, D MMMM YYYY') }}
-                                    </td>
-                                    <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">
-                                        Rp. {{ number_format($donation->amount, 0, ',', '.') }}
+                                        {{ $upgrade->created_at->isoFormat('dddd, D MMMM YYYY') }}
                                     </td>
                                     <td class="border px-6 py-4">
                                         <div class="flex justify-center gap-2">
@@ -96,45 +92,42 @@
                                                     </svg>
                                                 </div>
                                             </button>
-                                            @if (request()->status == 'false' || request()->status == '')
-                                                <form action="{{ route('pembayaran.destroy', $donation->id) }}"
-                                                    method="post" class="flex justify-center align-center">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="block"
-                                                        onclick="confirmDelete(event)">
-                                                        <div class="w-5 h-5">
-                                                            <svg viewBox="0 0 24 24"
-                                                                class="text-red-600 hover:text-red-400" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                                    stroke-linejoin="round"></g>
-                                                                <g id="SVGRepo_iconCarrier">
-                                                                    <path d="M20.5001 6H3.5" stroke="rgb(220 38 38)"
-                                                                        stroke-width="1.5" stroke-linecap="round">
-                                                                    </path>
-                                                                    <path d="M9.5 11L10 16" stroke="rgb(220 38 38)"
-                                                                        stroke-width="1.5" stroke-linecap="round">
-                                                                    </path>
-                                                                    <path d="M14.5 11L14 16" stroke="rgb(220 38 38)"
-                                                                        stroke-width="1.5" stroke-linecap="round">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
-                                                                        stroke="rgb(220 38 38)" stroke-width="1.5">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5"
-                                                                        stroke="rgb(220 38 38)" stroke-width="1.5"
-                                                                        stroke-linecap="round"></path>
-                                                                </g>
-                                                            </svg>
-                                                        </div>
-                                                    </button>
-                                                </form>
-                                            @endif
+                                            <form action="{{ route('upgrade-akun.destroy', $upgrade->id) }}"
+                                                method="post" class="flex justify-center align-center">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="block" onclick="confirmDelete(event)">
+                                                    <div class="w-5 h-5">
+                                                        <svg viewBox="0 0 24 24" class="text-red-600 hover:text-red-400"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                stroke-linejoin="round"></g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                <path d="M20.5001 6H3.5" stroke="rgb(220 38 38)"
+                                                                    stroke-width="1.5" stroke-linecap="round">
+                                                                </path>
+                                                                <path d="M9.5 11L10 16" stroke="rgb(220 38 38)"
+                                                                    stroke-width="1.5" stroke-linecap="round">
+                                                                </path>
+                                                                <path d="M14.5 11L14 16" stroke="rgb(220 38 38)"
+                                                                    stroke-width="1.5" stroke-linecap="round">
+                                                                </path>
+                                                                <path
+                                                                    d="M6.5 6C6.55588 6 6.58382 6 6.60915 5.99936C7.43259 5.97849 8.15902 5.45491 8.43922 4.68032C8.44784 4.65649 8.45667 4.62999 8.47434 4.57697L8.57143 4.28571C8.65431 4.03708 8.69575 3.91276 8.75071 3.8072C8.97001 3.38607 9.37574 3.09364 9.84461 3.01877C9.96213 3 10.0932 3 10.3553 3H13.6447C13.9068 3 14.0379 3 14.1554 3.01877C14.6243 3.09364 15.03 3.38607 15.2493 3.8072C15.3043 3.91276 15.3457 4.03708 15.4286 4.28571L15.5257 4.57697C15.5433 4.62992 15.5522 4.65651 15.5608 4.68032C15.841 5.45491 16.5674 5.97849 17.3909 5.99936C17.4162 6 17.4441 6 17.5 6"
+                                                                    stroke="rgb(220 38 38)" stroke-width="1.5">
+                                                                </path>
+                                                                <path
+                                                                    d="M18.3735 15.3991C18.1965 18.054 18.108 19.3815 17.243 20.1907C16.378 21 15.0476 21 12.3868 21H11.6134C8.9526 21 7.6222 21 6.75719 20.1907C5.89218 19.3815 5.80368 18.054 5.62669 15.3991L5.16675 8.5M18.8334 8.5L18.6334 11.5"
+                                                                    stroke="rgb(220 38 38)" stroke-width="1.5"
+                                                                    stroke-linecap="round"></path>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                            </form>
                                         </div>
+
                                         <div x-show="approve[{{ $i }}]"
                                             class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
                                             <div x-data="{ image_{{ $i }}: false }"
@@ -148,11 +141,10 @@
                                                             d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                 </button>
-                                                <form action="{{ route('pembayaran.update', $donation->id) }}"
+                                                <form action="{{ route('upgrade-akun.update', $upgrade->id) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('PUT')
-
                                                     <div class="w-full" x-show="image_{{ $i }}">
                                                         <x-secondary-button
                                                             x-on:click="image_{{ $i }} = false"
@@ -160,70 +152,47 @@
                                                     </div>
                                                     <x-primary-button type="button"
                                                         x-on:click="image_{{ $i }} = true"
-                                                        x-show="!image_{{ $i }}">Bukti
-                                                        Transfer</x-primary-button>
-                                                    <x-secondary-button type="button"
-                                                        x-on:click="image_{{ $i }} = null"
-                                                        x-show="!image_{{ $i }}">Informasi
-                                                        Donasi</x-secondary-button>
+                                                        x-show="!image_{{ $i }}">Dokument</x-primary-button>
                                                     <div class="my-2">
                                                         <table class="text-gray-500 text-md">
                                                             <tr>
-                                                                <td>Nama</td>
+                                                                <td>Nama Akun Bank</td>
                                                                 <th>:</th>
-                                                                <td><b>{{ $donation->bank_account_name }}</b></td>
+                                                                <td><b>{{ $upgrade->bank_account_name }}</b></td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Nominal</td>
+                                                                <td>Nomor Akun Bank</td>
                                                                 <th>:</th>
-                                                                <td>Rp.
-                                                                    <b>{{ number_format($donation->amount, 0, ',', '.') }}</b>
-                                                                </td>
+                                                                <td>{{ $upgrade->bank_account_number }}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>Tanggal</td>
+                                                                <td>Bank Type</td>
                                                                 <th>:</th>
-                                                                <td>{{ \Carbon\Carbon::parse($donation->created_at)->isoFormat('dddd, D MMMM YYYY') }}
-                                                                </td>
+                                                                <td>{{ $upgrade->bank_branch }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Nomor Telp</td>
+                                                                <th>:</th>
+                                                                <td>{{ $upgrade->phone }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Alasan Upgrade</td>
+                                                                <th>:</th>
+                                                                <td>{{ $upgrade->upgrade_reason }}</td>
                                                             </tr>
                                                         </table>
                                                     </div>
                                                     <div class="w-full" x-show="image_{{ $i }}">
-                                                        <img src="{{ asset('storage/' . $donation->image) }}"
-                                                            class="w-full" alt="">
+                                                        @if (explode('.', $upgrade->supporting_documents)[1] == 'pdf')
+                                                            <a href="{{ asset('storage/' . $upgrade->supporting_documents) }}"
+                                                                class="w-full h-full bg-center bg-cover md:w-32 max-w-full max-h-full">Dokument</a>
+                                                        @else
+                                                            <img src="{{ asset('storage/' . $upgrade->supporting_documents) }}"
+                                                                class="w-full h-full bg-center bg-cover md:w-32 max-w-full max-h-full"
+                                                                alt="bukti dokument" />
+                                                        @endif
                                                     </div>
-                                                    <div class="w-full border-dashed border-2 border-gray-400 p-2"
-                                                        x-show="image_{{ $i }} === null">
-                                                        <table class="text-gray-500 text-md">
-                                                            <tr>
-                                                                <td>Nama Kegiatan</td>
-                                                                <th>:</th>
-                                                                <td><b>{{ $donation->project->title }}</b></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Target Dana</td>
-                                                                <th>:</th>
-                                                                <td>Rp.
-                                                                    <b>{{ number_format($donation->project->target_amount, 0, ',', '.') }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Dana Terkumpul</td>
-                                                                <th>:</th>
-                                                                <td>Rp.
-                                                                    <b>{{ number_format($donation->project->collected_amount, 0, ',', '.') }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Batas Tanggal</td>
-                                                                <th>:</th>
-                                                                <td>{{ \Carbon\Carbon::parse($donation->project->target_date)->isoFormat('dddd, D MMMM YYYY') }}
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                    <input type="hidden" name="project_id"
-                                                        value="{{ $donation->project_id }}">
+                                                    <input type="hidden" name="project_id" value="{">
                                                     <div x-show="!image_{{ $i }}" class="my-2">
                                                         <x-input-label class="w-full"
                                                             for="konfirmasi_{{ $i }}">Konfirmasi</x-input-label>
@@ -232,10 +201,10 @@
                                                             id="konfirmasi_{{ $i }}"
                                                             onchange="ConfirmasiVerifed(this.value, '{{ $i }}')">
                                                             <option value="1"
-                                                                {{ $donation->is_verified ? 'selected disabled' : '' }}>
+                                                                {{ $upgrade->is_approved ? 'selected disabled' : '' }}>
                                                                 Ya</option>
                                                             <option value="0"
-                                                                {{ !$donation->is_verified ? 'selected disabled' : '' }}>
+                                                                {{ !$upgrade->is_approved ? 'selected disabled' : '' }}>
                                                                 Tidak</option>
                                                         </select>
                                                         <x-input-error class="mt-2" :messages="$errors->get('konfirmasi')" />
@@ -257,7 +226,6 @@
                         </tbody>
                     </table>
                     <div class="my-3">
-                        {{ $donations->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>

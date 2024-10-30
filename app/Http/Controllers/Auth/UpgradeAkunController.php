@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\UpgradeAccount;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UpgradeAkunController extends Controller
 {
@@ -12,7 +15,8 @@ class UpgradeAkunController extends Controller
      */
     public function index()
     {
-        //
+        $avatars = User::where('avatar', '!=', '')->limit(5)->get();
+        return view('auth.upgrade-akun.index', compact('avatars'));
     }
 
     /**
@@ -28,7 +32,28 @@ class UpgradeAkunController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([
+            'bank_account_name' => 'required',
+            'bank_account_number' => 'required',
+            'bank_branch' => 'required',
+            'phone' => 'required',
+            'upgrade_reason' => 'required',
+            'supporting_documents' => 'required|mimes:png,jpg,jpeg,pdf',
+        ]);
+        $image = $request->file('supporting_documents')->store('supporting_documents', 'public');
+        UpgradeAccount::create([
+            'bank_account_name' => $request->bank_account_name,
+            'bank_account_number' => $request->bank_account_number,
+            'bank_branch' => $request->bank_branch,
+            'phone' => $request->phone,
+            'upgrade_reason' => $request->upgrade_reason,
+            'supporting_documents' => $image,
+            'is_approved' => false,
+            'user_id' => Auth::user()->id,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'upgrade account berhasil dikirim');
     }
 
     /**

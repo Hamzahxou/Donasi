@@ -111,7 +111,7 @@
                                             </svg>
 
                                             <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
-                                                Gambar Kegiatan / Peoject</h2>
+                                                Gambar Kegiatan / Project</h2>
 
                                             <p class="mt-2 text-gray-500 tracking-wide">Unggah
                                                 file Anda

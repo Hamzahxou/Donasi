@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\UpgradeAccount;
 use Illuminate\Http\Request;
 
 class UserUpgradeAkunController extends Controller
@@ -12,7 +13,8 @@ class UserUpgradeAkunController extends Controller
      */
     public function index()
     {
-        //
+        $upgrade_accounts = UpgradeAccount::where('is_approved', false)->with('user')->get();
+        return view('admin.upgrade.index', compact('upgrade_accounts'));
     }
 
     /**
@@ -60,6 +62,9 @@ class UserUpgradeAkunController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $upgrade = UpgradeAccount::findOrFail($id);
+        $upgrade->delete();
+
+        return redirect()->route('dashboard')->with('success', 'upgrade account berhasil dihapus');
     }
 }
