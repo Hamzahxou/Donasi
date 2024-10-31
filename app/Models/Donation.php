@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Donation extends Model
 {
-    // use SoftDeletes;
+    use SoftDeletes;
     protected $fillable = [
         'bank_account_name',
         'amount',

@@ -22,6 +22,8 @@ class DashboardController extends Controller
         // }])->get();
         $projects = $donations->where('is_verified', true);
         // dd($projects->toArray());
-        return view('dashboard', compact('donations', 'projects'));
+
+        $my_projects = Project::with('donations')->where('user_id', $user->id)->get();
+        return view('dashboard', compact('donations', 'projects', 'my_projects'));
     }
 }

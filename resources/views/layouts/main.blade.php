@@ -77,12 +77,12 @@
                                 Donasi
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('categori.index') }}"
                                 class="{{ request()->routeIs('categori.*') ? 'text-orange-500 hover:text-orange-700' : 'hover:text-orange-500' }} duration-300 font-medium ease-linear   py-3">
                                 Categori
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                     <div class="flex gap-1 justify-center items-center">

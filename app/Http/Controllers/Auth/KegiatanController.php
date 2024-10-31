@@ -16,11 +16,16 @@ class KegiatanController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        // if ($user->role == 'admin') {
-        //     $projects = Project::paginate(10);
-        // } else {
-        $projects = Project::where('user_id', $user->id)->paginate(10);
-        // }
+        $projects = Project::where('user_id', $user->id);
+        if ($request->q) {
+            $projects->where('title', 'like', '%' . $request->q . '%');
+        }
+        if ($request->status) {
+            $status = $request->status == 'true' ? true : false;
+            $projects->where('is_active', $status);
+        }
+
+        $projects = $projects->paginate(10);
         return view('kegiatan.index', compact('projects'));
     }
 

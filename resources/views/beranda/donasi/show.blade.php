@@ -211,7 +211,9 @@
                                                                     src="{{ asset('https://api.dicebear.com/9.x/bottts-neutral/svg?seed=' . $comment->user->name) }}"
                                                                     alt=" {{ $comment->user->name }}">
                                                             @endif
-                                                            {{ explode(' ', $comment->user->name)[1] }}
+                                                            @if ($comment->user->name)
+                                                                {{ explode(' ', $comment->user->name)[0] }}
+                                                            @endif
                                                             @if ($comment->user->id == $project->user->id)
                                                                 <span
                                                                     class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium me-2 px-3 py-1 rounded">Pemilik</span>
@@ -299,7 +301,9 @@
                                                                         src="{{ asset('https://api.dicebear.com/9.x/bottts-neutral/svg?seed=' . $reply->user->name) }}"
                                                                         alt="{{ $reply->user->name }}">
                                                                 @endif
-                                                                {{ explode(' ', $reply->user->name)[1] }}
+                                                                @if ($reply->user->name)
+                                                                    {{ explode(' ', $reply->user->name)[0] }}
+                                                                @endif
                                                                 @if ($reply->user->id == $project->user->id)
                                                                     <span
                                                                         class="ms-2 bg-slate-800 text-slate-100 text-xs font-medium px-3 py-1 rounded">Pemilik</span>
@@ -326,7 +330,9 @@
                                                                                 </g>
                                                                             </svg>
                                                                         </div>
-                                                                        {{ explode(' ', $reply->parentReply->user->name)[1] }}
+                                                                        @if ($reply->parentReply->user->name)
+                                                                            {{ explode(' ', $reply->parentReply->user->name)[0] }}
+                                                                        @endif
                                                                     </div>
                                                                 @endif
                                                             </p>

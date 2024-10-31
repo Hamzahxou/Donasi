@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Donation::class);
     }
+
+    public function UpgradeAccount()
+    {
+        return $this->hasOne(UpgradeAccount::class);
+    }
 }

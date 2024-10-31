@@ -17,17 +17,18 @@ use App\Http\Controllers\CronJob\ProjectActive;
 use App\Http\Controllers\Midtrans\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\AdminOwner;
 use App\Http\Middleware\Donasi;
 use App\Http\Middleware\MidtransConfig;
-use App\Http\Middleware\Owner;
 use App\Http\Middleware\OwnerDonor;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('sinkronisasi', ProjectActive::class)->name('sinkronisasi');
 
 Route::get('/', [BerandaController::class, 'beranda'])->name('beranda');
 Route::resource('donation', DonationController::class)->only(['index', 'show']);
-Route::resource('categori', BerandaCategoryController::class)->only(['index', 'show']);
+// Route::resource('categori', BerandaCategoryController::class)->only(['index', 'show']);
 
 
 
@@ -49,13 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::middleware(Donasi::class)->group(function () {
         Route::resource('upgrade', UpgradeAkunController::class)->only(['index', 'store']);
     });
-
-    Route::resource('kegiatan', KegiatanController::class);
-    Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class);
-
     Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
-    Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
+    Route::middleware(AdminOwner::class)->group(function () {
+        Route::resource('kegiatan', KegiatanController::class);
+        Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class);
+
+        Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
+    });
     Route::middleware(Admin::class)->group(function () {
         Route::get('admin-dashboard', Dashboard::class)->name('admin.dashboard');
         Route::resource('pembayaran', PembayaranController::class);

@@ -1,5 +1,5 @@
 <x-main title="Mulai Donasimu">
-    <div class="flex justify-center items-center min-h-screen" id="donation-tab">
+    <div class="flex justify-center min-h-screen" id="donation-tab">
         <div class="mx-auto">
 
             <div x-data="{ openTab: 0 }" class="p-8 w-svw">
@@ -7,14 +7,14 @@
                     @foreach ($categories as $index => $category)
                         <button x-on:click="openTab = {{ $index }}"
                             :class="{ 'bg-orange-300 text-white': openTab === {{ $index }} }"
-                            class=" py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-orange transition-all duration-300">{{ $category->name }}</button>
+                            class=" py-2 px-4 rounded-md border border-gray-300 focus:outline-none focus:shadow-outline-orange transition-all duration-300">{{ $category->name }}</button>
                     @endforeach
                 </div>
 
                 @foreach ($categories as $index => $category)
                     @if ($category->projects->count() > 0)
                         @foreach ($category->projects as $project)
-                            <div x-show="openTab === {{ $index }}" class="transition-all duration-300">
+                            <div x-show="openTab === {{ $index }}" class="transition-all duration-300 w-96">
                                 <div class="flex gap-2 justify-center items-center flex-wrap">
                                     <!-- Centering wrapper -->
                                     <div

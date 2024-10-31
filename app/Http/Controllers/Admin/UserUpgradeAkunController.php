@@ -12,9 +12,24 @@ class UserUpgradeAkunController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $upgrade_accounts = UpgradeAccount::where('is_approved', false)->with('user')->get();
+        $upgrade_accounts = UpgradeAccount::with('user');
+        if ($request->q) {
+            $q = $request->q;
+            $upgrade_accounts->orWhere('bank_account_name', 'like', '%' . $q . '%')
+                ->orWhereHas('user', function ($query) use ($q) {
+                    $query->where('name', 'like', '%' . $q . '%');
+                });
+        }
+
+        if ($request->status == 'true') {
+            $upgrade_accounts->where('is_approved', true);
+        } else  if ($request->status == 'false') {
+            $upgrade_accounts->where('is_approved', false);
+        }
+
+        $upgrade_accounts = $upgrade_accounts->get();
         return view('admin.upgrade.index', compact('upgrade_accounts'));
     }
 
@@ -72,7 +87,7 @@ class UserUpgradeAkunController extends Controller
             $user->update([
                 'role' => 'donor'
             ]);
-            return redirect()->route('upgrade-akun.index')->with('error', 'upgrade account tidak disetujui');
+            return redirect()->route('upgrade-akun.index')->with('success', 'upgrade account tidak disetujui');
         }
     }
 

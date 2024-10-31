@@ -133,18 +133,44 @@
                                 class="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">
                                 Kegiatan / Project</h6>
                         </div>
-                        <button aria-expanded="false" aria-haspopup="menu" id=":r5:"
-                            class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                            type="button">
-                            <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="currenColor" viewBox="0 0 24 24"
-                                    stroke-width="3" stroke="currentColor" aria-hidden="true" class="h-6 w-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z">
-                                    </path>
-                                </svg>
-                            </span>
-                        </button>
+                    </div>
+
+                    <div class="p-6 w-full">
+                        <form class="w-full">
+                            <div class="flex gap-2 items-center">
+                                <div class="relative w-full">
+                                    <select
+                                        name="user"class="w-full border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 ">
+                                        <option value="" {{ request()->user == '' ? 'selected' : '' }}>
+                                            Semua user</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}"
+                                                {{ request()->user == $user->id ? 'selected' : '' }}>
+                                                {{ $user->name }} {{ $user->role == 'admin' ? '(admin)' : '' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <select
+                                    name="status"class=" border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 ">
+                                    <option value="" {{ request()->status == '' ? 'selected' : '' }}>
+                                        Semua</option>
+                                    <option value="true" {{ request()->status == 'true' ? 'selected' : '' }}>
+                                        Aktif</option>
+                                    <option value="false" {{ request()->status == 'false' ? 'selected' : '' }}>
+                                        Tidak Aktif</option>
+                                </select>
+                                {{-- <select
+                                    name="sampah"class="hidden border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 ">
+                                    <option value="false"
+                                        {{ request()->sampah == 'false' || request()->sampah == '' ? 'selected' : '' }}>
+                                        Disimpan</option>
+                                    <option value="true" {{ request()->sampah == 'true' ? 'selected' : '' }}>
+                                        Dihapus</option>
+                                </select> --}}
+                                <x-primary-button type="submit">cari</x-primary-button>
+                            </div>
+                        </form>
                     </div>
                     <div class="p-6 overflow-x-auto px-0 pt-0 pb-2">
                         <table class="w-full min-w-[640px] table-auto">
@@ -175,12 +201,13 @@
                                             class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
                                             kemajuan</p>
                                     </th>
-                                    <th></th>
+                                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($projects as $project)
-                                    <tr>
+                                @forelse ($projects as $i => $project)
+                                    <tr x-data="{ approve: {} }">
                                         <td class="py-3 px-5 border-b border-blue-gray-50">
                                             <div class="flex items-center gap-4">
                                                 <p
@@ -230,28 +257,135 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
-                                            <a href='{{ route('donation.show', $project->id) }}'
-                                                class="block text-blue-600 hover:text-blue-400">
-                                                <div class="w-5 h-5">
-                                                    <svg viewBox="0 0 24 24" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                            stroke-linejoin="round"></g>
-                                                        <g id="SVGRepo_iconCarrier">
-                                                            <path d="M13 11L22 2M22 2H16.6562M22 2V7.34375"
-                                                                stroke="rgb(22 163 74)" stroke-width="1.5"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                            </path>
-                                                            <path
-                                                                d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2.49073 19.5618 2.16444 18.1934 2.0551 16"
-                                                                stroke="rgb(22 163 74)" stroke-width="1.5"
-                                                                stroke-linecap="round"></path>
-                                                        </g>
-                                                    </svg>
+                                        <td class="py-3 px-5 border-b border-blue-gray-50">
+
+                                            <div class="flex gap-2 justify-end px-2 items-center">
+                                                @if ($project->user->role != 'admin')
+                                                    <button x-on:click="approve[{{ $i }}] = true"
+                                                        class="block text-blue-600 hover:text-blue-400">
+                                                        <div class="w-5 h-5">
+                                                            <svg viewBox="0 0 24 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></g>
+                                                                <g id="SVGRepo_iconCarrier">
+                                                                    <path d="M8.5 12.5L10.5 14.5L15.5 9.5"
+                                                                        stroke="orange" stroke-width="1.5"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C21.5093 4.43821 21.8356 5.80655 21.9449 8"
+                                                                        stroke="orange" stroke-width="1.5"
+                                                                        stroke-linecap="round"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </div>
+                                                    </button>
+                                                @endif
+                                                <a href='{{ route('donation.show', $project->id) }}'
+                                                    class="block text-blue-600 hover:text-blue-400">
+                                                    <div class="w-5 h-5">
+                                                        <svg viewBox="0 0 24 24" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
+                                                                stroke-linejoin="round"></g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                <path d="M13 11L22 2M22 2H16.6562M22 2V7.34375"
+                                                                    stroke="rgb(22 163 74)" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                </path>
+                                                                <path
+                                                                    d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2M22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2.49073 19.5618 2.16444 18.1934 2.0551 16"
+                                                                    stroke="rgb(22 163 74)" stroke-width="1.5"
+                                                                    stroke-linecap="round"></path>
+                                                            </g>
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            @if ($project->user->role != 'admin')
+                                                <div x-show="approve[{{ $i }}]"
+                                                    class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
+                                                    <div x-data="{ image_{{ $i }}: false }"
+                                                        class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden ">
+                                                        <button x-on:click="approve[{{ $i }}] = false"
+                                                            class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" class="h-6 w-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                        <x-secondary-button type="button"
+                                                            x-on:click="image_{{ $i }} = null"
+                                                            x-show="image_{{ $i }} !== null">Informasi
+                                                            Donasi</x-secondary-button>
+                                                        <div class="my-2">
+                                                            <table class="text-gray-500 text-md">
+                                                                <tr>
+                                                                    <td>Nama Akun Bank</td>
+                                                                    <th>:</th>
+                                                                    <td><b>{{ $project->user->UpgradeAccount->bank_account_name }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Type Bank</td>
+                                                                    <th>:</th>
+                                                                    <td><b>{{ $project->user->UpgradeAccount->bank_branch }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Nomor Bank</td>
+                                                                    <th>:</th>
+                                                                    <td><b>{{ $project->user->UpgradeAccount->bank_account_number }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Telp</td>
+                                                                    <th>:</th>
+                                                                    <td><b>{{ $project->user->UpgradeAccount->phone }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="w-full border-dashed border-2 border-gray-400 p-2"
+                                                            x-show="image_{{ $i }} === null">
+                                                            <table class="text-gray-500 text-md">
+                                                                <tr>
+                                                                    <td>Nama Kegiatan</td>
+                                                                    <th>:</th>
+                                                                    <td><b>{{ $project->title }}</b></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Target Dana</td>
+                                                                    <th>:</th>
+                                                                    <td>Rp.
+                                                                        <b>{{ number_format($project->target_amount, 0, ',', '.') }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Dana Terkumpul</td>
+                                                                    <th>:</th>
+                                                                    <td>Rp.
+                                                                        <b>{{ number_format($project->collected_amount, 0, ',', '.') }}</b>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Batas Tanggal</td>
+                                                                    <th>:</th>
+                                                                    <td>{{ \Carbon\Carbon::parse($project->target_date)->isoFormat('dddd, D MMMM YYYY') }}
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                            </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty

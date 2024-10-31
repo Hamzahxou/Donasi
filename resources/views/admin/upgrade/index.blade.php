@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg overflow-x-auto">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    {{-- <form class="w-full">
+                    <form class="w-full">
                         <div class="flex gap-2 items-center">
                             <div class="relative w-full">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -21,19 +21,19 @@
                                 </div>
                                 <input type="search" name="q" id="default-search"
                                     class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 "
-                                    placeholder="Cari Kegiatan" value="{{ request()->q }}" />
+                                    placeholder="Cari user" value="{{ request()->q }}" />
                             </div>
                             <select
                                 name="status"class="border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 ">
+                                <option value="all" {{ request()->status == '' ? 'selected' : '' }}>Semua</option>
                                 <option value="true" {{ request()->status == 'true' ? 'selected' : '' }}>
-                                    Terdata</option>
-                                <option value="false"
-                                    {{ request()->status == 'false' || request()->status == '' ? 'selected' : '' }}>
-                                    Tidak terdata</option>
+                                    Upgrade</option>
+                                <option value="false" {{ request()->status == 'false' ? 'selected' : '' }}>
+                                    Tidak Upgrade</option>
                             </select>
                             <x-primary-button type="submit">cari</x-primary-button>
                         </div>
-                    </form> --}}
+                    </form>
 
                     <hr class="border-b-2 border-taupeGray mt-4 mb-4 block" />
                     <table class="w-full whitespace-no-wrapw-full whitespace-no-wrap table-auto">
@@ -43,6 +43,7 @@
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Dokumen</td>
                                 <td class="border px-6 py-4 lg:w-[250px]">Nama</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal</td>
+                                <td class="border px-6 py-4 lg:w-[150px] hidden lg:table-cell">Status</td>
                                 <td class="border px-6 py-4  w-[100px]">Aksi</td>
                             </tr>
                         </thead>
@@ -69,6 +70,16 @@
                                     </td>
                                     <td class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
                                         {{ $upgrade->created_at->isoFormat('dddd, D MMMM YYYY') }}
+                                    </td>
+                                    <td class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">
+                                        @if ($upgrade->is_approved)
+                                            <span
+                                                class="inline-block text-nowrap bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-400">Disetujui</span>
+                                        @else
+                                            <span
+                                                class="inline-block text-nowrap bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
+                                                Disetujui</span>
+                                        @endif
                                     </td>
                                     <td class="border px-6 py-4">
                                         <div class="flex justify-center gap-2">

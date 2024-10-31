@@ -15,11 +15,27 @@ class PembayaranController extends Controller
     public function index(Request $request)
     {
         $donations = Donation::with(['user', 'project']);
+
+        // if ($request->sampah == 'true') {
+        //     $donations->onlyTrashed();
+        // }
+
+        if ($request->q) {
+            $q = $request->q;
+            $donations->orWhere('bank_account_name', 'like', '%' . $q . '%')
+                ->orWhereHas('user', function ($query) use ($q) {
+                    $query->where('name', 'like', '%' . $q . '%');
+                });
+        }
+
+
         if ($request->status == 'true') {
             $donations->where('is_verified', true);
         } elseif ($request->status == 'false' || $request->status == '') {
             $donations->where('is_verified', false);
         }
+
+
         $donations = $donations->paginate(10);
         return view('admin.pembayaran.index', compact('donations'));
     }
