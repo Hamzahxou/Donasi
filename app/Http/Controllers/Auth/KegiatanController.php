@@ -89,7 +89,7 @@ class KegiatanController extends Controller
         if ($project->user_id != Auth::user()->id) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
         }
-        $categories = Category::where('user_id', Auth::user()->id)->get();
+        $categories = Category::all();
         return view('kegiatan.edit', compact('project', 'categories'));
     }
 

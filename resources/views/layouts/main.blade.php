@@ -244,95 +244,18 @@
 
                 <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
                     <div>
-                        <p class="font-medium text-gray-900">Services</p>
+                        <p class="font-medium text-gray-900">Halaman</p>
 
                         <ul class="mt-6 space-y-4 text-sm">
                             <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> 1on1 Coaching
+                                <a href="{{ route('beranda') }}" class="text-gray-700 transition hover:opacity-75">
+                                    Beranda
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Company Review
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Accounts Review
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> HR Consulting
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> SEO Optimisation
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p class="font-medium text-gray-900">Company</p>
-
-                        <ul class="mt-6 space-y-4 text-sm">
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> About </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Meet the Team
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Accounts Review
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p class="font-medium text-gray-900">Helpful Links</p>
-
-                        <ul class="mt-6 space-y-4 text-sm">
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Contact </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> FAQs </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Live Chat </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p class="font-medium text-gray-900">Legal</p>
-
-                        <ul class="mt-6 space-y-4 text-sm">
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Accessibility
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Returns Policy
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Refund Policy
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#" class="text-gray-700 transition hover:opacity-75"> Hiring Statistics
+                                <a href="{{ route('donation.index') }}"
+                                    class="text-gray-700 transition hover:opacity-75"> Donasi
                                 </a>
                             </li>
                         </ul>
