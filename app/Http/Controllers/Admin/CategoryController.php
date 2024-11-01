@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::where('user_id', Auth::user()->id)->get();
+        $categories = Category::all();
         return view('category.index', compact('categories'));
     }
 
@@ -32,10 +33,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category' => 'required|max:255|unique:categories,name',
+            'category' => 'required|max:255|unique:categories,name,' . $request->category,
         ]);
 
-        Category::create(['name' => $request->category, 'user_id' => Auth::user()->id]);
+        Category::create(['name' => $request->category]);
         return redirect()->route('category.index')->with('success', 'Category Berhasil ditambahkan');
     }
 
@@ -58,13 +59,12 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
         $request->validate([
-            'category' => 'required|max:255|unique:categories,name,' . $id,
+            'category' => 'required|max:255|unique:categories,name,' . $category->id,
         ]);
 
-        $category = Category::findorFail($id);
         $category->update(['name' => $request->category]);
         return redirect()->route('category.index')->with('success', 'Category Berhasil diupdate');
     }

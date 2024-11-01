@@ -166,27 +166,27 @@
                                                         x-show="!image_{{ $i }}">Dokument</x-primary-button>
                                                     <div class="my-2">
                                                         <table class="text-gray-500 text-md">
-                                                            <tr>
+                                                            <tr class="border-b">
                                                                 <td>Nama Akun Bank</td>
                                                                 <th>:</th>
                                                                 <td><b>{{ $upgrade->bank_account_name }}</b></td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr class="border-b">
                                                                 <td>Nomor Akun Bank</td>
                                                                 <th>:</th>
                                                                 <td>{{ $upgrade->bank_account_number }}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr class="border-b">
                                                                 <td>Bank Type</td>
                                                                 <th>:</th>
                                                                 <td>{{ $upgrade->bank_branch }}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr class="border-b">
                                                                 <td>Nomor Telp</td>
                                                                 <th>:</th>
                                                                 <td>{{ $upgrade->phone }}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr class="border-b">
                                                                 <td>Alasan Upgrade</td>
                                                                 <th>:</th>
                                                                 <td>{{ $upgrade->upgrade_reason }}</td>

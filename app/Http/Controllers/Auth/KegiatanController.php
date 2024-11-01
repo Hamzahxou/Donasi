@@ -34,7 +34,7 @@ class KegiatanController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('user_id', Auth::user()->id)->get();
+        $categories = Category::all();
         return view('kegiatan.tambah', compact('categories'));
     }
 

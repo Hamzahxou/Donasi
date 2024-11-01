@@ -128,6 +128,11 @@
                                     <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
                                         <p
                                             class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
+                                            Status</p>
+                                    </th>
+                                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                                        <p
+                                            class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
                                             Target Dana</p>
                                     </th>
                                     <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
@@ -161,6 +166,18 @@
                                                 class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
                                                 Rp.
                                                 {{ number_format($project->amount, 0, ',', '.') }}
+                                            </p>
+                                        </td>
+                                        <td class="py-3 px-5 border-b border-blue-gray-50">
+                                            <p
+                                                class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
+                                                @if ($project->is_verified)
+                                                    <span class="inline-block text-green-500 text-sm font-medium">
+                                                        Disetujui</span>
+                                                @else
+                                                    <span class="inline-block text-red-500 text-sm font-medium">Belum
+                                                        Disetujui</span>
+                                                @endif
                                             </p>
                                         </td>
                                         <td class="py-3 px-5 border-b border-blue-gray-50">
@@ -200,17 +217,10 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td x-data="{ edit: false }">
                                             <div class="flex gap-2">
-                                                {{-- <form action="" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="nominal"
-                                                        value="{{ $project->amount }}">
-                                                    @php
-                                                        $nominal = number_format($project->amount, 0, ',', '.');
-                                                    @endphp
-                                                    <button type="button"
-                                                        onclick="editDonation(event, '{{ $nominal }}')"
+                                                @if ($project->is_verified == false)
+                                                    <button type="button" x-on:click="edit = true"
                                                         class="block text-blue-600 hover:text-blue-400">
                                                         <div class="w-4 h-4">
                                                             <svg viewBox="0 0 24 24" fill="none"
@@ -235,7 +245,7 @@
                                                             </svg>
                                                         </div>
                                                     </button>
-                                                </form> --}}
+                                                @endif
                                                 <a href='{{ route('donation.show', $project->project->id) }}'
                                                     class="block text-blue-600 hover:text-blue-400">
                                                     <div class="w-4 h-4">
@@ -258,6 +268,134 @@
                                                     </div>
                                                 </a>
                                             </div>
+                                            @if ($project->is_verified == false)
+                                                <div x-show="edit == true"
+                                                    class="fixed inset-0 bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl flex justify-center items-center px-10 w-full">
+                                                    <div class="bg-white p-5 relative rounded-md w-96 max-h-screen overflow-y-auto overflow-x-hidden "
+                                                        x-data="{ form: true }">
+                                                        <button x-on:click="edit = false"
+                                                            class="absolute rounded-full top-2 right-2 text-sm text-gray-600">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="1.5"
+                                                                stroke="currentColor" class="h-6 w-6">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </button>
+                                                        <form action="{{ route('donation.update', $project->id) }}"
+                                                            method="post" enctype="multipart/form-data">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <div x-show="form">
+                                                                <div class="my-2">
+                                                                    <x-input-label class="w-full" for="namaAkun">Nama
+                                                                        Akun
+                                                                        bank</x-input-label>
+                                                                    <x-text-input placeholder="Nama akun Bank"
+                                                                        class="w-full" name="namaAkun"
+                                                                        :value="$project->bank_account_name" id="namaAkun" required
+                                                                        autofocus />
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('namaAkun')" />
+                                                                </div>
+                                                                <div class="my-2">
+                                                                    <x-input-label class="w-full"
+                                                                        for="nominal_transfer">Nominal</x-input-label>
+                                                                    <x-text-input placeholder="Nominal ditransfer"
+                                                                        class="w-full uang" name="nominal"
+                                                                        :value="number_format(
+                                                                            $project->amount,
+                                                                            0,
+                                                                            ',',
+                                                                            '.',
+                                                                        )" min="500"
+                                                                        max="9999999999999.99" id="nominal_transfer"
+                                                                        reuired />
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('nominal')" />
+                                                                </div>
+                                                                <label
+                                                                    class="relative mx-auto cursor-pointer flex w-full max-w-lg flex-col items-center justify-center rounded-xl border-2 border-dashed border-orange-400 bg-white p-6 text-center"
+                                                                    htmlFor="dropzone-file">
+                                                                    <div class="hidden justify-center flex-col items-center "
+                                                                        id="preview-label">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="h-10 w-10 text-orange-800"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor" strokeWidth="2">
+                                                                            <path strokeLinecap="round"
+                                                                                strokeLinejoin="round"
+                                                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                                        </svg>
+
+                                                                        <h2
+                                                                            class="mt-4 text-xl font-medium text-gray-700 tracking-wide">
+                                                                            Bukti Transfer</h2>
+
+                                                                        <p class="mt-2 text-gray-500 tracking-wide">
+                                                                            Unggah
+                                                                            file Anda
+                                                                            <b>berkas PNG, JPG, JPEG</b>
+                                                                        </p>
+
+                                                                        <input id="dropzone-file" type="file"
+                                                                            class="hidden" name="image"
+                                                                            onchange="previews(this)"
+                                                                            accept="image/png, image/jpeg, image/jpg" />
+
+                                                                    </div>
+                                                                    <img id="preview"
+                                                                        src="{{ asset('storage/' . $project->image) }}"
+                                                                        class="w-full rounded-md">
+                                                                </label>
+                                                                <x-input-error class="mt-2" :messages="$errors->get('image')" />
+
+                                                                <div class="w-full flex justify-between gap-2 mt-2">
+                                                                    <x-primary-button type="submit"
+                                                                        class="w-full">Kirim</x-primary-button>
+                                                                    <x-secondary-button type="button"
+                                                                        x-on:click="form = false">
+                                                                        <svg viewBox="0 0 24 24" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5">
+                                                                            <g id="SVGRepo_bgCarrier"
+                                                                                stroke-width="0">
+                                                                            </g>
+                                                                            <g id="SVGRepo_tracerCarrier"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></g>
+                                                                            <g id="SVGRepo_iconCarrier">
+                                                                                <path
+                                                                                    d="M8 10.5H16M8 14.5H11M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+                                                                                    stroke="#1C274C" stroke-width="2"
+                                                                                    stroke-linecap="round"
+                                                                                    stroke-linejoin="round"></path>
+                                                                            </g>
+                                                                        </svg></x-secondary-button>
+                                                                </div>
+                                                            </div>
+                                                            <div x-show="!form">
+                                                                <x-secondary-button class="button"
+                                                                    x-on:click="form = true">
+                                                                    kembali
+                                                                </x-secondary-button>
+                                                                <div>
+                                                                    <x-input-label class="w-full"
+                                                                        for="pesan">Pesan</x-input-label>
+                                                                    <textarea name="pesan" id="pesan"
+                                                                        class="w-full p-2 border-orange-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm "
+                                                                        placeholder="ketik pesan untuk donasi ini">{{ $project->message }}</textarea>
+                                                                    <x-input-error class="mt-2" :messages="$errors->get('pesan')" />
+                                                                    <div>
+                                                                        <x-primary-button type="button"
+                                                                            x-on:click="form = true" class="w-full">
+                                                                            Lanjut
+                                                                        </x-primary-button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -276,9 +414,9 @@
             @if (auth()->user()->role == 'project_owner')
                 <div class="mb-4 w-full">
                     <div
-                        class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
+                        class=" flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
                         <div
-                            class="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
+                            class=" bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
                             <div>
                                 <h6
                                     class="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">
@@ -421,26 +559,13 @@
 
     @push('script')
         <script>
-            async function editDonation(e, nominal) {
-                e.preventDefault()
-                const form = e.target.closest('form')
-                const inputValue = nominal
-                const {
-                    value: email
-                } = await Swal.fire({
-                    title: "Jumlah Donasi",
-                    input: "text",
-                    inputLabel: "Jumlah Donasi",
-                    inputPlaceholder: "",
-                    inputValue,
-                    didOpen: () => {
-                        $('.swal2-input').addClass('uang').mask('000.000.000', {
-                            reverse: true
-                        });
-                    }
-                });
-                if (email) {
-                    Swal.fire(`Nominal: ${email}`);
+            function previews(e) {
+                const [file] = e.files;
+                const extension_available = ['png', 'jpg', 'jpeg'];
+                const extension_file = file['type'].split('/')[1];
+                if (extension_available.includes(extension_file)) {
+                    document.getElementById('preview-label').classList.add('hidden')
+                    document.getElementById('preview').src = URL.createObjectURL(file);
                 }
 
             }

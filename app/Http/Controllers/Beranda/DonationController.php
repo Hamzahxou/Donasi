@@ -57,4 +57,32 @@ class DonationController extends Controller
         ]);
         return redirect()->back()->with('success', 'Donasi berhasil dikirim');
     }
+    public function update(Request $request, string $id)
+    {
+        $donation = Donation::findOrFail($id);
+        if ($donation->user_id != Auth::user()->id) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
+        }
+        if ($donation->is_verified == true) {
+            return redirect()->back()->with('error', 'Donasi sudah disetujui');
+        }
+        $request->validate([
+            'nominal' => 'required|max:9999999999999.99',
+            'namaAkun' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg',
+        ]);
+        if ($request->hasFile('image')) {
+            if (file_exists(public_path('storage/' . $donation->image))) {
+                unlink(public_path('storage/' . $donation->image));
+            }
+            $image = $request->file('image')->store('gambar', 'public');
+        }
+        $donation->update([
+            'bank_account_name' => $request->namaAkun,
+            'amount' => $request->nominal,
+            'image' => $image ?? $donation->image,
+            'message' => $request->pesan,
+        ]);
+        return redirect()->back()->with('success', 'Donasi berhasil diubah');
+    }
 }

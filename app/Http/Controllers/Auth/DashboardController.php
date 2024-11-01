@@ -17,11 +17,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $donations = Donation::where('user_id', $user->id)->with('project')->get();
-        // $projects = Project::with(['donations' => function ($query) {
-        //     $query->where('is_verified', true);
-        // }])->get();
-        $projects = $donations->where('is_verified', true);
-        // dd($projects->toArray());
+        $projects = $donations;
 
         $my_projects = Project::with('donations')->where('user_id', $user->id)->get();
         return view('dashboard', compact('donations', 'projects', 'my_projects'));

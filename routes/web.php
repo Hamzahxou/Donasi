@@ -46,11 +46,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard',  DashboardController::class)->middleware(OwnerDonor::class)->name('dashboard');
     Route::resource('comment', CommentController::class)->only(['store', 'update', 'destroy']);
     Route::resource('comment-reply', CommentReplyController::class)->only(['store', 'update', 'destroy']);
+    Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
+    Route::put('donation/{id}', [DonationController::class, 'update'])->name('donation.update');
 
     Route::middleware(Donasi::class)->group(function () {
         Route::resource('upgrade', UpgradeAkunController::class)->only(['index', 'store']);
     });
-    Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
 
     Route::middleware(AdminOwner::class)->group(function () {
         Route::resource('kegiatan', KegiatanController::class);

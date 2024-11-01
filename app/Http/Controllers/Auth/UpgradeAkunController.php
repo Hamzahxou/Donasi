@@ -15,7 +15,7 @@ class UpgradeAkunController extends Controller
      */
     public function index()
     {
-        $avatars = User::where('avatar', '!=', '')->limit(5)->get();
+        $avatars = User::whereNotNull('avatar')->limit(5)->get();
         return view('auth.upgrade-akun.index', compact('avatars'));
     }
 

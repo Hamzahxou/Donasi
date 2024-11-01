@@ -173,7 +173,7 @@
                                                     <x-secondary-button type="button"
                                                         x-on:click="image_{{ $i }} = null"
                                                         x-show="!image_{{ $i }}">Informasi
-                                                        Donasi</x-secondary-button>
+                                                        Kegiatan</x-secondary-button>
                                                     <div class="my-2">
                                                         <table class="text-gray-500 text-md">
                                                             <tr>
