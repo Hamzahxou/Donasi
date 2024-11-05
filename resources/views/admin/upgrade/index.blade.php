@@ -51,7 +51,7 @@
                             @forelse ($upgrade_accounts as $i => $upgrade)
                                 <tr x-data="{ approve: {} }">
                                     <td class="border px-6 py-4 text-center">
-                                        {{ $loop->iteration }}
+                                        {{ $upgrade_accounts->firstItem() + $loop->index }}
                                     </td>
                                     <td class="border px-6 py-4 hidden lg:table-cell">
                                         <div class="w-32 mx-auto">
@@ -236,6 +236,7 @@
                         </tbody>
                     </table>
                     <div class="my-3">
+                        {{ $upgrade_accounts->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>

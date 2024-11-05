@@ -136,6 +136,11 @@ class KegiatanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $donation = Project::findOrFail($id)->load('donations');
+        if ($donation->donations->count() > 0) {
+            return redirect()->back()->with('error', 'Upps, Kegiatan tidak dapat dihapus');
+        }
+        $donation->delete();
+        return redirect()->back()->with('success', 'Kegiatan berhasil dihapus');
     }
 }

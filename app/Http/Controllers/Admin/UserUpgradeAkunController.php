@@ -29,7 +29,7 @@ class UserUpgradeAkunController extends Controller
             $upgrade_accounts->where('is_approved', false);
         }
 
-        $upgrade_accounts = $upgrade_accounts->get();
+        $upgrade_accounts = $upgrade_accounts->paginate(10);
         return view('admin.upgrade.index', compact('upgrade_accounts'));
     }
 

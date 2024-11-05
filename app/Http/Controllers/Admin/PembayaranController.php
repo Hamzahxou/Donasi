@@ -16,10 +16,6 @@ class PembayaranController extends Controller
     {
         $donations = Donation::with(['user', 'project']);
 
-        // if ($request->sampah == 'true') {
-        //     $donations->onlyTrashed();
-        // }
-
         if ($request->q) {
             $q = $request->q;
             $donations->orWhere('bank_account_name', 'like', '%' . $q . '%')
@@ -33,6 +29,10 @@ class PembayaranController extends Controller
             $donations->where('is_verified', true);
         } elseif ($request->status == 'false' || $request->status == '') {
             $donations->where('is_verified', false);
+        }
+
+        if ($request->sampah == 'true') {
+            $donations = Donation::with(['user', 'project'])->onlyTrashed();
         }
 
 
@@ -71,11 +71,6 @@ class PembayaranController extends Controller
     {
         //
     }
-
-    // public function approve(string $id)
-    // {
-    //     //
-    // }
 
     /**
      * Update the specified resource in storage.
@@ -128,7 +123,7 @@ class PembayaranController extends Controller
 
     public function restore(string $id)
     {
-        $donation = Donation::findOrFail($id);
+        $donation = Donation::onlyTrashed()->firstWhere('id', $id);
         $donation->restore();
         return redirect()->back()->with('success', 'Donasi berhasil dikembalikan');
     }

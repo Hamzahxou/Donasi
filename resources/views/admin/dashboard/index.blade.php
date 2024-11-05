@@ -31,11 +31,6 @@
                             @endphp
                             Rp. {{ number_format($total_dana, 0, ',', '.') }}</h4>
                     </div>
-                    {{-- <div class="border-t border-blue-gray-50 p-4">
-                        <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                            <strong class="text-red-500">-2%</strong>&nbsp;than yesterday
-                        </p>
-                    </div> --}}
                 </div>
                 <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
                     <div
@@ -65,11 +60,6 @@
                             </strong>
                         </h4>
                     </div>
-                    {{-- <div class="border-t border-blue-gray-50 p-4">
-                        <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                            <strong class="text-green-500">+5%</strong>&nbsp;than yesterday
-                        </p>
-                    </div> --}}
                 </div>
                 <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
                     <div
@@ -83,16 +73,33 @@
                     </div>
                     <div class="p-4 text-right">
                         <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                            Jumlah Donasi</p>
+                            Jumlah Donasi <span
+                                class="text-small bg-blue-100 text-xs font-medium px-2.5 py-0.5 rounded">Menunggu</span>
+                        </p>
                         <h4
                             class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {{ $donations->count() }}</h4>
+                            {{ $donations->where('is_verified', false)->count() }}</h4>
                     </div>
-                    {{-- <div class="border-t border-blue-gray-50 p-4">
-                        <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                            <strong class="text-green-500">+3%</strong>&nbsp;than last month
+                </div>
+                <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+                    <div
+                        class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-purple-600 to-purple-400 text-white shadow-purple-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                            aria-hidden="true" class="w-6 h-6 text-white">
+                            <path fill-rule="evenodd"
+                                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="p-4 text-right">
+                        <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                            Jumlah Donasi <span
+                                class="text-small bg-green-100 text-xs font-medium px-2.5 py-0.5 rounded">Berhasil</span>
                         </p>
-                    </div> --}}
+                        <h4
+                            class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-green-900">
+                            {{ $donations->where('is_verified', true)->count() }}</h4>
+                    </div>
                 </div>
                 <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
                     <div
@@ -109,13 +116,8 @@
                             Jumlah Kegiatan</p>
                         <h4
                             class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {{ $projects->count() }}</h4>
+                            {{ $all_projects }}</h4>
                     </div>
-                    {{-- <div class="border-t border-blue-gray-50 p-4">
-                        <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                            <strong class="text-green-500">+3%</strong>&nbsp;than last month
-                        </p>
-                    </div> --}}
                 </div>
             </div>
 

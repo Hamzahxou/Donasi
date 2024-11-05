@@ -43,15 +43,16 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware(AdminOwner::class)->group(function () {
-        Route::resource('kegiatan', KegiatanController::class);
-        Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class);
+        Route::resource('kegiatan', KegiatanController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class)->only(['store', 'update', 'destroy']);
 
         Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
     });
     Route::middleware(Admin::class)->group(function () {
         Route::get('admin-dashboard', Dashboard::class)->name('admin.dashboard');
-        Route::resource('pembayaran', PembayaranController::class);
-        Route::resource('upgrade-akun', UserUpgradeAkunController::class);
+        Route::resource('pembayaran', PembayaranController::class)->only(['index', 'update', 'destroy']);
+        Route::post('pembayaran/{id}/restore', [PembayaranController::class, 'restore'])->name('pembayaran.restore');
+        Route::resource('upgrade-akun', UserUpgradeAkunController::class)->only(['index', 'update', 'destroy']);
     });
 });
 

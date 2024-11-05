@@ -57,7 +57,7 @@
                             @forelse ($projects as $project)
                                 <tr>
                                     <td class="border px-6 py-4 text-center">
-                                        {{ $loop->iteration }}
+                                        {{ $projects->firstItem() + $loop->index }}
                                     <td class="border px-6 py-4 hidden lg:table-cell">
                                         <div class="w-32 h-20 mx-auto">
                                             <img src="{{ asset('storage/' . $project->image) }}"
@@ -143,11 +143,12 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <form action="" method="post"
-                                                class="flex justify-center align-center">
+                                            <form action="{{ route('kegiatan.destroy', $project->id) }}"
+                                                method="post" class="flex justify-center align-center">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="block" onclick="confirmDelete(event)">
+                                                <button type="submit" class="block"
+                                                    onclick="hapusKegiatanConfim(event)">
                                                     <div class="w-5 h-5">
                                                         <svg viewBox="0 0 24 24"
                                                             class="text-red-600 hover:text-red-400" fill="none"
@@ -196,4 +197,26 @@
         </div>
     </div>
 
+    @push('script')
+        <script>
+            function hapusKegiatanConfim() {
+                event.preventDefault();
+                let form = event.target.closest('form');
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Ini akan menghapus komentar ini",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#333',
+                    cancelButtonColor: '#c3c3c3',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        </script>
+    @endpush
 </x-app-layout>

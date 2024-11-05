@@ -34,9 +34,10 @@ class Dashboard extends Controller
         }
 
 
-        $projects = $projects->paginate(1);
+        $projects = $projects->paginate(10);
         $donations = Donation::all();
+        $all_projects = Project::count();
 
-        return view('admin.dashboard.index', compact('projects', 'donations', 'users'));
+        return view('admin.dashboard.index', compact('projects', 'donations', 'users', 'all_projects'));
     }
 }
