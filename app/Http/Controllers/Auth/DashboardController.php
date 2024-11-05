@@ -16,10 +16,10 @@ class DashboardController extends Controller
     public function __invoke(Request $request)
     {
         $user = Auth::user();
-        $donations = Donation::where('user_id', $user->id)->with('project')->get();
+        $donations = Donation::where('user_id', $user->id)->with('project')->paginate(1);
         $projects = $donations;
 
-        $my_projects = Project::with('donations')->where('user_id', $user->id)->get();
+        $my_projects = Project::with('donations')->where('user_id', $user->id)->paginate(1);
         return view('dashboard', compact('donations', 'projects', 'my_projects'));
     }
 }

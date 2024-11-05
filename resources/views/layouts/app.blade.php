@@ -42,6 +42,27 @@
     @stack('script')
 
     <x-alert />
+
+    <script>
+        function KonfirmasiKeluar(e) {
+            e.preventDefault()
+            const form = e.target.closest('form')
+            Swal.fire({
+                title: "Kamu Yakin?",
+                text: "Ingin keluar dari akun ini",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "rgb(249 115 22)",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit()
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>

@@ -49,6 +49,7 @@
                                 <td class="border px-6 py-4 lg:w-[250px]">Judul</td>
                                 <td class="border px-6 py-4 lg:w-[250px] hidden lg:table-cell">Tanggal Berakhir</td>
                                 <td class="border px-6 py-4 lg:w-[100px] hidden lg:table-cell">Status</td>
+                                <td class="border px-6 py-4 lg:w-[100px] hidden lg:table-cell">Categori</td>
                                 <td class="border px-6 py-4  w-[100px]">Aksi</td>
                             </tr>
                         </thead>
@@ -91,6 +92,9 @@
                                                 class="inline-block text-nowrap bg-red-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-400">Tidak
                                                 aktif</span>
                                         @endif
+                                    </td>
+                                    <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">
+                                        {{ $project->category->name }}
                                     </td>
                                     <td class="border px-6 py-4">
                                         <div class="flex justify-center gap-2">

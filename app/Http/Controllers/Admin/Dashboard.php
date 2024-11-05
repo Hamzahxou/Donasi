@@ -34,7 +34,7 @@ class Dashboard extends Controller
         }
 
 
-        $projects = $projects->get();
+        $projects = $projects->paginate(1);
         $donations = Donation::all();
 
         return view('admin.dashboard.index', compact('projects', 'donations', 'users'));

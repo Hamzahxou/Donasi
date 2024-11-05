@@ -407,6 +407,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="my-2 p-6">
+                            {{ $projects->appends(request()->query())->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -550,6 +553,10 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div class="my-2 p-6">
+                            {{ $my_projects->appends(request()->query())->links() }}
                         </div>
                     </div>
                 </div>

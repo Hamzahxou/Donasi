@@ -16,7 +16,7 @@ class KegiatanController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $projects = Project::where('user_id', $user->id);
+        $projects = Project::where('user_id', $user->id)->with('category');
         if ($request->q) {
             $projects->where('title', 'like', '%' . $request->q . '%');
         }
@@ -44,7 +44,7 @@ class KegiatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "title" => 'required|max:255',
+            "title" => 'required|max:255|unique:projects,title',
             "deskripsi" => 'required',
             "content" => 'required',
             "target_dana" => 'required|max:9999999999999.99',
@@ -103,7 +103,7 @@ class KegiatanController extends Controller
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengedit kegiatan ini');
         }
         $request->validate([
-            "title" => 'required|max:255',
+            "title" => 'required|max:255|unique:projects,title,' . $project->id,
             "deskripsi" => 'required',
             "content" => 'required',
             "target_dana" => 'required|max:9999999999999.99',

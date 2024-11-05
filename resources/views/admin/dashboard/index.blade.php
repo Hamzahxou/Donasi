@@ -156,14 +156,6 @@
                                     <option value="false" {{ request()->status == 'false' ? 'selected' : '' }}>
                                         Tidak Aktif</option>
                                 </select>
-                                {{-- <select
-                                    name="sampah"class="hidden border border-gray-300 rounded-lg bg-gray-50 focus:ring-orange-500 focus:border-orange-500 ">
-                                    <option value="false"
-                                        {{ request()->sampah == 'false' || request()->sampah == '' ? 'selected' : '' }}>
-                                        Disimpan</option>
-                                    <option value="true" {{ request()->sampah == 'true' ? 'selected' : '' }}>
-                                        Dihapus</option>
-                                </select> --}}
                                 <x-primary-button type="submit">cari</x-primary-button>
                             </div>
                         </form>
@@ -403,6 +395,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="my-2 p-6">
+                        {{ $projects->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
