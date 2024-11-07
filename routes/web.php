@@ -1,23 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\Dashboard;
-use App\Http\Controllers\Admin\PembayaranController;
-use App\Http\Controllers\Admin\UserUpgradeAkunController;
-use App\Http\Controllers\Auth\CommentController;
-use App\Http\Controllers\Auth\CommentReplyController;
-use App\Http\Controllers\Auth\DashboardController;
-use App\Http\Controllers\Auth\KegiatanController;
-use App\Http\Controllers\Auth\kegiatanTerbaruController;
-use App\Http\Controllers\Auth\UpgradeAkunController;
-use App\Http\Controllers\Beranda\BerandaController;
-use App\Http\Controllers\Beranda\DonationController;
+use App\Http\Controllers\Admin\{CategoryController, Dashboard, PembayaranController, UserUpgradeAkunController};
+use App\Http\Controllers\Auth\{CommentController, CommentReplyController, DashboardController, KegiatanController, kegiatanTerbaruController, UpgradeAkunController};
+use App\Http\Controllers\Beranda\{BerandaController, DonationController};
 use App\Http\Controllers\CronJob\ProjectActive;
 use App\Http\Controllers\ProfileController;
-use App\Http\Middleware\Admin;
-use App\Http\Middleware\AdminOwner;
-use App\Http\Middleware\Donasi;
-use App\Http\Middleware\OwnerDonor;
+use App\Http\Middleware\{Admin, AdminOwner, Donasi, OwnerDonor};
 use Illuminate\Support\Facades\Route;
 
 
@@ -46,7 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware(AdminOwner::class)->group(function () {
         Route::resource('kegiatan', KegiatanController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('kegiatan-terbaru', kegiatanTerbaruController::class)->only(['store', 'update', 'destroy']);
-
         Route::resource('category', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
     });
     Route::middleware(Admin::class)->group(function () {
