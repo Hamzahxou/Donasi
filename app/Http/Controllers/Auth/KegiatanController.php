@@ -128,7 +128,7 @@ class KegiatanController extends Controller
             'category_id' => $request->kategori,
         ]);
 
-        return redirect()->route('kegiatan.index')->with('success', 'kegiatan / project berhasil dibuat');
+        return redirect()->route('kegiatan.index')->with('success', 'kegiatan / project berhasil diubah');
     }
 
     /**

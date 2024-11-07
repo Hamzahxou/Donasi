@@ -8,12 +8,13 @@ use App\Models\Donation;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class DonationController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::with('projects')->get();
         return view('beranda.donasi.index', compact('categories'));
     }
     public function show(Request $request, string $id) //, Project $id
@@ -84,5 +85,15 @@ class DonationController extends Controller
             'message' => $request->pesan,
         ]);
         return redirect()->back()->with('success', 'Donasi berhasil diubah');
+    }
+
+    public function almost()
+    {
+
+        $categories = Category::withWhereHas('projects', function ($query) {
+            $query->where('is_active', true)->whereDate('target_date', '<=', \Carbon\Carbon::now()->addDays(10));
+        })->get();
+
+        return view('beranda.donasi.show_almost', compact('categories'));
     }
 }

@@ -475,7 +475,7 @@
                                                 <p
                                                     class="block antialiased font-sans text-xs font-medium text-blue-gray-600">
                                                     Rp.
-                                                    {{ number_format($project->donations->sum('amount'), 0, ',', '.') }}
+                                                    {{ number_format($project->donations->where('is_verified', true)->sum('amount'), 0, ',', '.') }}
                                                 </p>
                                             </td>
                                             <td class="py-3 px-5 border-b border-blue-gray-50">

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('sinkronisasi', ProjectActive::class)->name('sinkronisasi');
 
 Route::get('/', [BerandaController::class, 'beranda'])->name('beranda');
+Route::get('donation_almost', [DonationController::class, 'almost'])->name('donation.almost');
 Route::resource('donation', DonationController::class)->only(['index', 'show']);
 
 
@@ -35,8 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard',  DashboardController::class)->middleware(OwnerDonor::class)->name('dashboard');
     Route::resource('comment', CommentController::class)->only(['store', 'update', 'destroy']);
     Route::resource('comment-reply', CommentReplyController::class)->only(['store', 'update', 'destroy']);
-    Route::post('donation', [DonationController::class, 'store'])->name('donation.store');
-    Route::put('donation/{id}', [DonationController::class, 'update'])->name('donation.update');
+    Route::resource('donation', DonationController::class)->only(['store', 'update']);
+
 
     Route::middleware(Donasi::class)->group(function () {
         Route::resource('upgrade', UpgradeAkunController::class)->only(['index', 'store']);

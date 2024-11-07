@@ -130,8 +130,8 @@
                                     <x-input-label for="target_dana" :value="__('Target Dana')" />
                                     <div class="relative">
                                         <x-text-input id="target_dana" name="target_dana" type="text"
-                                            class="mt-1 block w-full uang" :value="old('target_dana')" value="100.000"
-                                            min="0" max="9999999999999.99" required autofocus />
+                                            class="mt-1 block w-full uang" :value="old('target_dana')" min="0"
+                                            max="9999999999999.99" required autofocus />
                                         <span class="absolute top-0 left-1 text-[10px] text-gray-700">Rp.</span>
                                     </div>
                                     <x-input-error class="mt-2" :messages="$errors->get('target_dana')" />
