@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project;
 use App\Models\UpgradeAccount;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -87,6 +88,12 @@ class UserUpgradeAkunController extends Controller
             $user->update([
                 'role' => 'donor'
             ]);
+            $projects = Project::where('user_id', $user->id)->get();
+            if ($projects->count() > 0) {
+                foreach ($projects as $project) {
+                    $project->update(['is_active' => false]);
+                }
+            }
             return redirect()->route('upgrade-akun.index')->with('success', 'upgrade account tidak disetujui');
         }
     }

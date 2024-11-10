@@ -34,7 +34,6 @@ class DonationController extends Controller
         ])->loadCount(['donations' => function ($query) {
             $query->where('is_verified', true);
         }]);
-        // dd($project->toArray());
         return view('beranda.donasi.show', compact('project'));
     }
 

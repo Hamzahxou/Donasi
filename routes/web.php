@@ -8,7 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\{Admin, AdminOwner, Donasi, OwnerDonor};
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('sinkronisasi', ProjectActive::class)->name('sinkronisasi');
 
 Route::get('/', [BerandaController::class, 'beranda'])->name('beranda');

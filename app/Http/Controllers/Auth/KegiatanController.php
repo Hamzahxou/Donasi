@@ -15,6 +15,7 @@ class KegiatanController extends Controller
      */
     public function index(Request $request)
     {
+
         $user = Auth::user();
         $projects = Project::where('user_id', $user->id)->with('category');
         if ($request->q) {
@@ -55,7 +56,7 @@ class KegiatanController extends Controller
             'tanggal_akhir.after' => 'Tanggal akhir harus berisi tanggal setelah hari ini.',
         ]);
         $image = $request->file('gambar')->store('gambar', 'public');
-        $project = Project::create([
+        Project::create([
             'image' => $image,
             'title' => $request->title,
             'description' => $request->deskripsi,

@@ -10,6 +10,7 @@ class Category extends Model
         'name'
     ];
     public $timestamps = false;
+
     public function projects()
     {
         return $this->hasMany(Project::class, 'category_id', 'id');
